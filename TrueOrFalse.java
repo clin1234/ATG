@@ -3,25 +3,21 @@ public class TrueOrFalse extends Question {
 
 	// Data Members
 	
-	private String trueOption;
-	private String falseOption;
+	private static final String TRUEOPTION = "True";
+	private static final String FALSEOPTION = "False";
 	
 	// Constructor
-	public TrueOrFalse(String s, String q, String ca, String to, String fo) {
+	public TrueOrFalse(String s, String q, String ca, String TRUEOPTION, String FALSEOPTION) {
 		
 		// Calling super-class' constructor
 		super(s,q,ca);
-		
-		// Initializing true and false response options
-		trueOption = to;
-		falseOption = fo;
 	}
 	
 	public void printOptions() {
 		
 		// For example purposes I'll be using System.out.println()
-		System.out.println("   " + "A. " + trueOption);
-		System.out.println("   " + "B. " + falseOption);
+		System.out.println("   " + "O " + TRUEOPTION);
+		System.out.println("   " + "O " + FALSEOPTION);
 		
 	}
 
