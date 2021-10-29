@@ -13,39 +13,34 @@ public abstract class Question {
 	// Constructor 
 	// Used only to initialize variables for the subclasses
 
-	/**
-	@param	s	Subject
-	@param	q	Question
-	@param	ca	Correct Answer
-	*/
-	public Question(String s, String q, String ca) {
-		subject = s;
-		question = q;
-		correctAnswer = ca;	
+	public Question(String theSubject, String theQuestion, String theCorrectAnswer) {
+		subject = theSubject;
+		question = theQuestion;
+		correctAnswer = theCorrectAnswer;	
 	}
 	
 	// Methods
 	
 	public abstract void printOptions();
 	
-	public void setSubject(String s) {
-		subject = s;
+	public void setSubject(String theSubject) {
+		subject = theSubject;
 	}
 	
 	public String getSubject() {
 		return subject;
 	}
 	
-	public void setQuestion(String q) {
-		question = q ;
+	public void setQuestion(String theQuestion) {
+		question = theQuestion;
 	}
 	
 	public String getQuestion() {
 		return question;
 	}
 	
-	public void setCorrectAnswer(String ca) {
-		correctAnswer = ca;
+	public void setCorrectAnswer(String theCorrectAnswer) {
+		correctAnswer = theCorrectAnswer;
 	}
 	
 	public String getCorrectAnswer() {
@@ -56,8 +51,8 @@ public abstract class Question {
 		return userAnswer;
 	}
 
-	public void setUserAnswer(String ui) {
-		userAnswer = ui;
+	public void setUserAnswer(String theUserAnswer) {
+		userAnswer = theUserAnswer;
 	}
 
 }
