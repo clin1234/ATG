@@ -131,13 +131,14 @@ public class Exam {
 	public void gradeExam() {
 
 		for (var question : questionBank) {
-			if (question instanceof ShortAnswer)
+			if (question instanceof ShortAnswer) {
 				if (((ShortAnswer) question).isCorrect())
 					userScore += QUESTION_WEIGHT;
-				// If user's recorded answer is the same as correct one, then...
-				else if (question.getUserAnswer().equals(question.getCorrectAnswer())) {
-					userScore += QUESTION_WEIGHT;
-				}
+			}
+			// If user's recorded answer is the same as correct one, then...
+			else if (question.getUserAnswer().equals(question.getCorrectAnswer())) {
+				userScore += QUESTION_WEIGHT;
+			}
 		}
 	}
 
