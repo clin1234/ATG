@@ -15,25 +15,25 @@ public class Exam {
 	// Data Members
 
 	private String userName;
-	private String testDate;
+	private String testDateAndTime;
 	private int userScore = 0;
 	private final int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
-	private final Question[] questionBank = new Question[20];
+	private final Question[] questionBank = new Question[25];
 
 	// Constructor
 
-	public Exam(String u, String td) {
+	public Exam(String theUser, String theDate) {
 
 		// Setting user's name and date test was taken to the Exam
-		userName = u;
-		testDate = td;
+		userName = theUser;
+		testDateAndTime = theDate;
 
 		// Creating Math Subject Question Objects
 		MultipleChoice Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
 		MultipleChoice Math_MCQUestion2 = new MultipleChoice("Math", "What is 10 * 10?", "100", "0", "100", "1000",
 				"010");
-		TrueOrFalse Math_ToF = new TrueOrFalse("Math", "Math is an universal language.", "True", "True", "False");
+		TrueOrFalse Math_ToF = new TrueOrFalse("Math", "Math is a universal language.", "True", "True", "False");
 		FillInTheBlank Math_FiB = new FillInTheBlank("Math", "18 + 3 = ", "21");
 
 		// Creating History Subject Question Objects
@@ -146,7 +146,7 @@ public class Exam {
 	public void displayResult() {
 		// For example purposes I'll be using System.out.println()
 		System.out.println("Name: " + userName);
-		System.out.println("Date: " + testDate);
+		System.out.println("Date: " + testDateAndTime);
 		System.out.println("Score: " + userScore + "/" + MAX_SCORE);
 	}
 
@@ -154,7 +154,7 @@ public class Exam {
 		return userName;
 	}
 
-	public void setUserName(String u) {
-		userName = u;
+	public void setUserName(String theUser) {
+		userName = theUser;
 	}
 }
