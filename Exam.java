@@ -15,7 +15,7 @@ public class Exam {
 	// Data Members
 	
 	private String userName;
-	private String testDate;
+	private String testDateAndTime;
 	private int userScore = 0;
 	private final int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
@@ -24,11 +24,11 @@ public class Exam {
 	
 	// Constructor
 	
-	public Exam(String u, String td) {
+	public Exam(String theUser, String theDate) {
 		
 		// Setting user's name and date test was taken to the Exam
-		userName = u;
-		testDate = td;
+		String theUser = userName;
+		String theDate = testDateAndTime;
 		
 		// Creating Math Subject Question Objects
 		MultipleChoice Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
