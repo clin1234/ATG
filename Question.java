@@ -11,7 +11,7 @@ public abstract class Question {
 	// Constructor 
 	// Used only to initialize variables for the subclasses
 
-	/*
+	/**
 	@param	s	Subject
 	@param	q	Question
 	@param	ca	Correct Answer
