@@ -132,7 +132,7 @@ public class Exam {
 				// Print response options based on the object's type
 				questionBank[i].printOptions();
 
-				// Waiting for user's input
+				// Get user's input
 				System.out.print("Your Answer: ");
 				String userInput = scanner.nextLine();
 
@@ -172,7 +172,16 @@ public class Exam {
 		return userName;
 	}
 
-	public void setUserName(String theUser) {
-		userName = theUser;
+	public String getTestDate() {
+		return testDate;
 	}
+	
+	public int getMAX_SCORE() {
+		return MAX_SCORE;
+	}
+	
+	public int getQUESTION_WEIGHT() {
+		return QUESTION_WEIGHT;
+	}
+
 }

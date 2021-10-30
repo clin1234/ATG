@@ -20,10 +20,10 @@ public class MultipleChoice extends Question {
 		super(theSubject, theQuestion, theCorrectAnswer);
 		
 		// Adding responses options to the array
-		responseOptions[0] = choices[0]
-		responseOptions[1] = choices[1]
-		responseOptions[2] = choices[2]
-		responseOptions[3] = choices[3]
+		responseOptions[0] = choices[0];
+		responseOptions[1] = choices[1];
+		responseOptions[2] = choices[2];
+		responseOptions[3] = choices[3];
 	}
 	
 	// Methods
@@ -43,10 +43,10 @@ public class MultipleChoice extends Question {
 	
 	public void setResponseOptions(String... choices) {
 		
-		responseOptions[0] = choices[0]
-		responseOptions[1] = choices[1]
-		responseOptions[2] = choices[2]
-		responseOptions[3] = choices[3]
+		responseOptions[0] = choices[0];
+		responseOptions[1] = choices[1];
+		responseOptions[2] = choices[2];
+		responseOptions[3] = choices[3];
 	}
 
 }

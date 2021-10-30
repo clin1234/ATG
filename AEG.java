@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class AEG {
@@ -8,7 +9,7 @@ public class AEG {
 		try (Scanner s = new Scanner(System.in)) {
 			name = s.nextLine();
 		}
-		Exam e = new Exam(name);
+		Exam e = new Exam(name, LocalDate.now().toString());
 		
 		e.takeExam();
 		e.gradeExam();
