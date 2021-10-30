@@ -22,10 +22,4 @@ public class ShortAnswer extends Question {
         return userAns.containsAll(expectedKw);
     }
 
-    @Override
-    public void printOptions() {
-        // Thanks
-
-    }
-
 }

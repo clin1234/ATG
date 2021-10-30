@@ -17,7 +17,5 @@ public class FillInTheBlank extends Question{
 		// Calling super-class' constructor
 		super(s,q,ca);
 	}
-	
-	public void printOptions() {}
 
 }

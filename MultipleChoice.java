@@ -52,7 +52,4 @@ public class MultipleChoice extends Question {
 		responseOptions[3] = r4;
 	}
 
-	
-	
-
 }

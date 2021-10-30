@@ -21,7 +21,7 @@ public abstract class Question {
 	
 	// Methods
 	
-	public abstract void printOptions();
+	public void printOptions() {}
 	
 	public void setSubject(String theSubject) {
 		subject = theSubject;
