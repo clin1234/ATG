@@ -9,13 +9,10 @@ public class MultipleChoice extends Question {
 	// Constructor
 	/**
 	 * 
-	 * @param s Subject
-	 * @param q Question
-	 * @param ca Correct choice
-	 * @param r1 Choice 1
-	 * @param r2 Choice 2
-	 * @param r3 Choice 3
-	 * @param r4 Choice 4
+	 * @param theSubject Subject
+	 * @param theQuestion Question
+	 * @param theCorrectAnswer Correct choice
+	 * @param chocies Response options
 	 */
 	public MultipleChoice(String theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 		
