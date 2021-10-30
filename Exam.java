@@ -19,7 +19,7 @@ public class Exam {
 	private int userScore = 0;
 	private final int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
-	private final Question[] questionBank = new Question[20];
+	private final Question[] questionBank = new Question[25];
 
 	// Constructor
 
@@ -35,6 +35,9 @@ public class Exam {
 				"010");
 		TrueOrFalse Math_ToF = new TrueOrFalse("Math", "Math is an universal language.", "True", "True", "False");
 		FillInTheBlank Math_FiB = new FillInTheBlank("Math", "18 + 3 = ", "21");
+		var Math_SA = new ShortAnswer("Math",
+				"What statement from Cantor states that the set of all real numbers is uncountable?", "Cantor's",
+				"first");
 
 		// Creating History Subject Question Objects
 		MultipleChoice History_MCQuestion1 = new MultipleChoice("History", "Who said \"I have a dream.\"?",
@@ -45,6 +48,9 @@ public class Exam {
 				"True", "False");
 		FillInTheBlank History_FiB = new FillInTheBlank("History", "When looking at ancient history, BC stands for ",
 				"Before Christ");
+		var History_SA = new ShortAnswer("History",
+				"In 1955, when the Warsaw Pact was founded, who were its founding members?", "Albania", "East Germany",
+				"Czechoslovakia", "Poland", "Hungary", "Albania", "Bulgaria", "Romania", "Soviet Union");
 
 		// Creating Science Subject Question Objects
 		MultipleChoice Science_MCQuestion1 = new MultipleChoice("Science",
@@ -55,6 +61,8 @@ public class Exam {
 				"True", "True", "False");
 		FillInTheBlank Science_FiB = new FillInTheBlank("Science",
 				"The smallest particle of an element is also known as a/an _____", "atom");
+		var Science_SA = new ShortAnswer("Science", "In words (no variables), describe Newton's 2nd law of motion",
+				"net force", "mass", "acceleration");
 
 		// Creating Arts Subject Question Objects
 		MultipleChoice Arts_MCQuestion1 = new MultipleChoice("Arts", "How many strings does a cello have?", "4", "4",
@@ -64,6 +72,8 @@ public class Exam {
 		TrueOrFalse Arts_ToF = new TrueOrFalse("Arts", "The Monalisa does not have eyebrows.", "True", "True", "False");
 		FillInTheBlank Arts_FiB = new FillInTheBlank("Arts",
 				"____ is the color we get when mixing red and blue together.", "Violet");
+		var Arts_SA = new ShortAnswer("Arts", "In what battle and war was Picasso's \"Guernica\" set in?",
+				"Bombing of Guernica", "Spanish Civil War");
 
 		// Creating Geography Subject Question Objects
 		MultipleChoice Geography_MCQuestion1 = new MultipleChoice("Geography", "Where is the Capoeira dance from?",
@@ -74,28 +84,36 @@ public class Exam {
 				"India is the country with the highest population in the world.", "False", "True", "False");
 		FillInTheBlank Geography_FiB = new FillInTheBlank("Geography",
 				"The biggest state in the United States is _____", "Alaska");
+		var Geography_SA = new ShortAnswer("Geography",
+				"Which countries claim to be the legitimate government of China? Write their official names.",
+				"People's Republic of China", "Republic of China");
 
 		// Filling Exam with questions from different subjects
 		questionBank[0] = Math_MCQuestion1;
 		questionBank[1] = Math_MCQUestion2;
 		questionBank[2] = Math_ToF;
 		questionBank[3] = Math_FiB;
-		questionBank[4] = History_MCQuestion1;
-		questionBank[5] = History_MCQUestion2;
-		questionBank[6] = History_ToF;
-		questionBank[7] = History_FiB;
-		questionBank[8] = Science_MCQuestion1;
-		questionBank[9] = Science_MCQuestion2;
-		questionBank[10] = Science_ToF;
-		questionBank[11] = Science_FiB;
-		questionBank[12] = Arts_MCQuestion1;
-		questionBank[13] = Arts_MCQuestion2;
-		questionBank[14] = Arts_ToF;
-		questionBank[15] = Arts_FiB;
-		questionBank[16] = Geography_MCQuestion1;
-		questionBank[17] = Geography_MCQuestion2;
-		questionBank[18] = Geography_ToF;
-		questionBank[19] = Geography_FiB;
+		questionBank[4] = Math_SA;
+		questionBank[5] = History_MCQuestion1;
+		questionBank[6] = History_MCQUestion2;
+		questionBank[7] = History_ToF;
+		questionBank[8] = History_FiB;
+		questionBank[9] = History_SA;
+		questionBank[10] = Science_MCQuestion1;
+		questionBank[11] = Science_MCQuestion2;
+		questionBank[12] = Science_ToF;
+		questionBank[13] = Science_FiB;
+		questionBank[14] = Science_SA;
+		questionBank[15] = Arts_MCQuestion1;
+		questionBank[16] = Arts_MCQuestion2;
+		questionBank[17] = Arts_ToF;
+		questionBank[18] = Arts_FiB;
+		questionBank[19] = Arts_SA;
+		questionBank[20] = Geography_MCQuestion1;
+		questionBank[21] = Geography_MCQuestion2;
+		questionBank[22] = Geography_ToF;
+		questionBank[23] = Geography_FiB;
+		questionBank[24] = Geography_SA;
 	}
 
 	// Methods
@@ -104,27 +122,25 @@ public class Exam {
 	public void takeExam() {
 
 		// Creating Scanner object to read user's input
-		Scanner scanner = new Scanner(System.in);
+		try (var scanner = new Scanner(System.in)) {
+			for (int i = 0; i < questionBank.length; i++) {
 
-		for (int i = 0; i < questionBank.length - 1; i++) {
+				// Printing the question
+				System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
 
-			// Printing the question
-			System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
+				// Print response options based on the object's type
+				questionBank[i].printOptions();
 
-			// Print response options based on the object's type
-			questionBank[i].printOptions();
+				// Waiting for user's input
+				System.out.print("Your Answer: ");
+				String userInput = scanner.nextLine();
 
-			// Waiting for user's input
-			System.out.print("Your Answer: ");
-			String userInput = scanner.nextLine();
+				// Recording user's answer
+				questionBank[i].setUserAnswer(userInput);
 
-			// Recording user's answer
-			questionBank[i].setUserAnswer(userInput);
-
-			System.out.println();
+				System.out.println();
+			}
 		}
-
-		scanner.close();
 	}
 
 	// Function to grade the exam

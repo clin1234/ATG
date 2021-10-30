@@ -9,8 +9,8 @@ public class ShortAnswer extends Question {
     }
 
     public boolean isCorrect() {
-        var userAns = new HashSet<>(Arrays.asList(getUserAnswer().split(" ")));
-        var expectedKw = new HashSet<>(Arrays.asList(super.getCorrectAnswer().split(",")));
+        var userAns = new HashSet<>(Arrays.asList(getUserAnswer().toLowerCase().split(" |,|:|;|.|?|!")));
+        var expectedKw = new HashSet<>(Arrays.asList(super.getCorrectAnswer().toLowerCase().split(",")));
         return userAns.containsAll(expectedKw);
     }
 
