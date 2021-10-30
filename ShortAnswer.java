@@ -7,13 +7,13 @@ import java.util.HashSet;
 public class ShortAnswer extends Question {
     /**
      * 
-     * @param s Subject
-     * @param q Question
+     * @param theSubject Subject
+     * @param theQuestion Question
      * @param keywords Keywords expected in the user's answer for the user's answer
      * to be deemed correct
      */
-    public ShortAnswer(String s, String q, String... keywords) {
-        super(s, q, String.join(",", keywords));
+    public ShortAnswer(String theSubString, String theQuestion, String... keywords) {
+        super(theSubString, theQuestion, String.join(",", keywords));
     }
 
     public boolean isCorrect() {

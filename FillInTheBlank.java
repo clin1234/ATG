@@ -6,16 +6,10 @@ public class FillInTheBlank extends Question{
 	
 	
 	// Constructor
-	/**
-	 * 
-	 * @param s Subject
-	 * @param q Question
-	 * @param ca Correct answer
-	 */
-	public FillInTheBlank(String s, String q, String ca) {
+	public FillInTheBlank(String theSubject, String theQuestion, String theCorrectAnswer) {
 		
 		// Calling super-class' constructor
-		super(s,q,ca);
+		super(theSubject,theQuestion,theCorrectAnswer);
 	}
 
 }

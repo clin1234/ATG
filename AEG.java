@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class AEG {
 
 	public static void main(String[] args) {
-		System.out.print("Name? ");
+		System.out.print("Enter your first and last name.");
 		String name;
 		try (var s = new Scanner(System.in)) {
 			name = s.next();
