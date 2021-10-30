@@ -1,4 +1,5 @@
 
+
 public class TrueOrFalse extends Question {
 
 	// Data Members
@@ -7,10 +8,10 @@ public class TrueOrFalse extends Question {
 	private static final String FALSEOPTION = "False";
 	
 	// Constructor
-	public TrueOrFalse(String s, String q, String ca, String TRUEOPTION, String FALSEOPTION) {
+	public TrueOrFalse(String theSubject, String theQuestion, String theCorrectAnswer, String TRUEOPTION, String FALSEOPTION) {
 		
 		// Calling super-class' constructor
-		super(s,q,ca);
+		super(theSubject, theQuestion, theCorrectAnswer);
 	}
 	
 	public void printOptions() {
