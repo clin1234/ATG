@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.time.LocalDate;
 
 /*
  * Notes:
@@ -15,19 +16,17 @@ public class Exam {
 	// Data Members
 
 	private String userName;
-	private String testDateAndTime;
 	private int userScore = 0;
-	private final int MAX_SCORE = 25;
+	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
 
 	// Constructor
 
-	public Exam(String theUser, String theDate) {
+	public Exam(String theUser) {
 
-		// Setting user's name and date test was taken to the Exam
+		// Setting exam taker's name
 		userName = theUser;
-		testDateAndTime = theDate;
 
 		// Creating Math Subject Question Objects
 		MultipleChoice Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
@@ -162,7 +161,8 @@ public class Exam {
 	public void displayResult() {
 		// For example purposes I'll be using System.out.println()
 		System.out.println("Name: " + userName);
-		System.out.println("Date: " + testDateAndTime);
+		// Prints out current date
+		System.out.println("Date: " + LocalDate.now().toString());
 		System.out.println("Score: " + userScore + "/" + MAX_SCORE);
 	}
 
