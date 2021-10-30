@@ -17,16 +17,16 @@ public class MultipleChoice extends Question {
 	 * @param r3 Choice 3
 	 * @param r4 Choice 4
 	 */
-	public MultipleChoice(String s, String q, String ca, String r1, String r2, String r3, String r4) {
+	public MultipleChoice(String theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 		
 		// Calling super-class' constructor
-		super(s,q,ca);
+		super(theSubject, theQuestion, theCorrectAnswer);
 		
 		// Adding responses options to the array
-		responseOptions[0] = r1;
-		responseOptions[1] = r2;
-		responseOptions[2] = r3;
-		responseOptions[3] = r4;
+		responseOptions[0] = choices[0]
+		responseOptions[1] = choices[1]
+		responseOptions[2] = choices[2]
+		responseOptions[3] = choices[3]
 	}
 	
 	// Methods
@@ -44,12 +44,12 @@ public class MultipleChoice extends Question {
 		return responseOptions;
 	}
 	
-	public void setResponseOptions(String r1, String r2, String r3, String r4) {
+	public void setResponseOptions(String... choices) {
 		
-		responseOptions[0] = r1;
-		responseOptions[1] = r2;
-		responseOptions[2] = r3;
-		responseOptions[3] = r4;
+		responseOptions[0] = choices[0]
+		responseOptions[1] = choices[1]
+		responseOptions[2] = choices[2]
+		responseOptions[3] = choices[3]
 	}
 
 }
