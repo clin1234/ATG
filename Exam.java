@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.time.LocalDate;
 
 /*
  * Notes:
@@ -32,8 +31,7 @@ public class Exam {
 
 		// Creating Math Subject Question Objects
 		var Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
-		var Math_MCQUestion2 = new MultipleChoice("Math", "What is 10 * 10?", "100", "0", "100", "1000",
-				"010");
+		var Math_MCQUestion2 = new MultipleChoice("Math", "What is 10 * 10?", "100", "0", "100", "1000", "010");
 		var Math_ToF = new TrueOrFalse("Math", "Math is a universal language.", "True", "True", "False");
 		var Math_FiB = new FillInTheBlank("Math", "18 + 3 = ", "21");
 		var Math_SA = new ShortAnswer("Math",
@@ -43,10 +41,10 @@ public class Exam {
 		// Creating History Subject Question Objects
 		var History_MCQuestion1 = new MultipleChoice("History", "Who said \"I have a dream.\"?",
 				"Martin Luther King Jr.", "Ghandi.", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks.");
-		var History_MCQUestion2 = new MultipleChoice("History",
-				"In which year did the first man walk on the moon?", "1969", "1969", "1960", "1925", "1989");
-		var History_ToF = new TrueOrFalse("History", "California and Texas were once part of Mexico.", "True",
-				"True", "False");
+		var History_MCQUestion2 = new MultipleChoice("History", "In which year did the first man walk on the moon?",
+				"1969", "1969", "1960", "1925", "1989");
+		var History_ToF = new TrueOrFalse("History", "California and Texas were once part of Mexico.", "True", "True",
+				"False");
 		var History_FiB = new FillInTheBlank("History", "When looking at ancient history, BC stands for ",
 				"Before Christ");
 		var History_SA = new ShortAnswer("History",
@@ -56,35 +54,35 @@ public class Exam {
 		// Creating Science Subject Question Objects
 		var Science_MCQuestion1 = new MultipleChoice("Science",
 				"Approximately, how many bones does the human body have?", "206", "206", "301", "167", "269");
-		var Science_MCQuestion2 = new MultipleChoice("Science",
-				"AU is an abbreviation for which chemical element?", "Gold", "Silver", "Gold", "Bronze", "Mercury");
-		var Science_ToF = new TrueOrFalse("Science", "The average human body has an average of 46 chromosomes.",
-				"True", "True", "False");
+		var Science_MCQuestion2 = new MultipleChoice("Science", "AU is an abbreviation for which chemical element?",
+				"Gold", "Silver", "Gold", "Bronze", "Mercury");
+		var Science_ToF = new TrueOrFalse("Science", "The average human body has an average of 46 chromosomes.", "True",
+				"True", "False");
 		var Science_FiB = new FillInTheBlank("Science",
 				"The smallest particle of an element is also known as a/an _____", "atom");
 		var Science_SA = new ShortAnswer("Science", "In words (no variables), describe Newton's 2nd law of motion",
 				"net force", "mass", "acceleration");
 
 		// Creating Arts Subject Question Objects
-		var Arts_MCQuestion1 = new MultipleChoice("Arts", "How many strings does a cello have?", "4", "4",
-				"6", "10", "2");
-		var Arts_MCQuestion2 = new MultipleChoice("Arts", "Nike was the goddess of what?", "Victory", "Love",
-				"War", "Victory", "Nature");
+		var Arts_MCQuestion1 = new MultipleChoice("Arts", "How many strings does a cello have?", "4", "4", "6", "10",
+				"2");
+		var Arts_MCQuestion2 = new MultipleChoice("Arts", "Nike was the goddess of what?", "Victory", "Love", "War",
+				"Victory", "Nature");
 		var Arts_ToF = new TrueOrFalse("Arts", "The Monalisa does not have eyebrows.", "True", "True", "False");
-		var Arts_FiB = new FillInTheBlank("Arts",
-				"____ is the color we get when mixing red and blue together.", "Violet");
+		var Arts_FiB = new FillInTheBlank("Arts", "____ is the color we get when mixing red and blue together.",
+				"Violet");
 		var Arts_SA = new ShortAnswer("Arts", "In what battle and war was Picasso's \"Guernica\" set in?",
 				"Bombing of Guernica", "Spanish Civil War");
 
 		// Creating Geography Subject Question Objects
-		var Geography_MCQuestion1 = new MultipleChoice("Geography", "Where is the Capoeira dance from?",
-				"Brazil", "Mexico", "Brazil", "South Africa", "Venezuela");
-		var Geography_MCQuestion2 = new MultipleChoice("Geography", "How many continents are there?", "7",
-				"5", "6", "7", "8");
+		var Geography_MCQuestion1 = new MultipleChoice("Geography", "Where is the Capoeira dance from?", "Brazil",
+				"Mexico", "Brazil", "South Africa", "Venezuela");
+		var Geography_MCQuestion2 = new MultipleChoice("Geography", "How many continents are there?", "7", "5", "6",
+				"7", "8");
 		var Geography_ToF = new TrueOrFalse("Geography",
 				"India is the country with the highest population in the world.", "False", "True", "False");
-		var Geography_FiB = new FillInTheBlank("Geography",
-				"The biggest state in the United States is _____", "Alaska");
+		var Geography_FiB = new FillInTheBlank("Geography", "The biggest state in the United States is _____",
+				"Alaska");
 		var Geography_SA = new ShortAnswer("Geography",
 				"Which countries claim to be the legitimate government of China? Write their official names.",
 				"People's Republic of China", "Republic of China");
@@ -175,11 +173,11 @@ public class Exam {
 	public String getTestDate() {
 		return testDate;
 	}
-	
+
 	public int getMAX_SCORE() {
 		return MAX_SCORE;
 	}
-	
+
 	public int getQUESTION_WEIGHT() {
 		return QUESTION_WEIGHT;
 	}

@@ -10,7 +10,7 @@ public class AEG {
 			name = s.nextLine();
 		}
 		Exam e = new Exam(name, LocalDate.now().toString());
-		
+
 		e.takeExam();
 		e.gradeExam();
 		e.displayResult();
