@@ -17,8 +17,8 @@ public class TrueOrFalse extends Question {
 	public void printOptions() {
 		
 		// For example purposes I'll be using System.out.println()
-		System.out.println("   " + "O " + TRUEOPTION);
-		System.out.println("   " + "O " + FALSEOPTION);
+		System.out.println("A. " + TRUEOPTION);
+		System.out.println("B. " + FALSEOPTION);
 		
 	}
 
