@@ -7,7 +7,16 @@ public class MultipleChoice extends Question {
 	private String[] responseOptions = new String[4];
 	
 	// Constructor
-	
+	/**
+	 * 
+	 * @param s Subject
+	 * @param q Question
+	 * @param ca Correct choice
+	 * @param r1 Choice 1
+	 * @param r2 Choice 2
+	 * @param r3 Choice 3
+	 * @param r4 Choice 4
+	 */
 	public MultipleChoice(String s, String q, String ca, String r1, String r2, String r3, String r4) {
 		
 		// Calling super-class' constructor
@@ -42,8 +51,5 @@ public class MultipleChoice extends Question {
 		responseOptions[2] = r3;
 		responseOptions[3] = r4;
 	}
-
-	
-	
 
 }
