@@ -15,9 +15,9 @@ public class Exam {
 	// Data Members
 
 	private String userName;
-	private String testDateAndTime;
+	private String testDate;
 	private int userScore = 0;
-	private final int MAX_SCORE = 25;
+	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
 
@@ -27,7 +27,7 @@ public class Exam {
 
 		// Setting user's name and date test was taken to the Exam
 		userName = theUser;
-		testDateAndTime = theDate;
+		testDate = theDate;
 
 		// Creating Math Subject Question Objects
 		MultipleChoice Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
@@ -122,30 +122,30 @@ public class Exam {
 	public void takeExam() {
 
 		// Creating Scanner object to read user's input
-		var scanner = new Scanner(System.in);
-			for (int i = 0; i < questionBank.length; i++) {
 
-				// Printing the question
-				System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
+		for (int i = 0; i < questionBank.length; i++) {
 
-				// Print response options based on the object's type
-				questionBank[i].printOptions();
+			// Printing the question
+			System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
 
-				// Waiting for user's input
-				System.out.print("Your Answer: ");
-				String userInput = "";
-				while (scanner.hasNextLine()) {
+			// Print response options based on the object's type
+			questionBank[i].printOptions();
+
+			// Waiting for user's input
+			System.out.print("Your Answer: ");
+			String userInput = "";
+			try (var scanner = new Scanner(System.in)) {
+				if (scanner.hasNextLine())
 					userInput = scanner.nextLine();
-				}
-
-				// Recording user's answer
-				questionBank[i].setUserAnswer(userInput);
-				userInput = null;
-
-				System.out.println();
 			}
-			scanner.close();
+
+			// Recording user's answer
+			questionBank[i].setUserAnswer(userInput);
+			userInput = null;
+
+			System.out.println();
 		}
+	}
 
 	// Function to grade the exam
 	public void gradeExam() {
@@ -166,7 +166,7 @@ public class Exam {
 	public void displayResult() {
 		// For example purposes I'll be using System.out.println()
 		System.out.println("Name: " + userName);
-		System.out.println("Date: " + testDateAndTime);
+		System.out.println("Date: " + testDate);
 		System.out.println("Score: " + userScore + "/" + MAX_SCORE);
 	}
 
@@ -174,7 +174,15 @@ public class Exam {
 		return userName;
 	}
 
-	public void setUserName(String theUser) {
-		userName = theUser;
+	public String getTestDate() {
+		return testDate;
+	}
+
+	public int getMAX_SCORE() {
+		return MAX_SCORE;
+	}
+
+	public int getQUESTION_WEIGHT() {
+		return QUESTION_WEIGHT;
 	}
 }
