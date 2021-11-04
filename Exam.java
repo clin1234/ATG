@@ -122,7 +122,7 @@ public class Exam {
 	public void takeExam() {
 
 		// Creating Scanner object to read user's input
-		try (var scanner = new Scanner(System.in)) {
+		var scanner = new Scanner(System.in);
 			for (int i = 0; i < questionBank.length; i++) {
 
 				// Printing the question
@@ -133,15 +133,19 @@ public class Exam {
 
 				// Waiting for user's input
 				System.out.print("Your Answer: ");
-				String userInput = scanner.nextLine();
+				String userInput = "";
+				while (scanner.hasNextLine()) {
+					userInput = scanner.nextLine();
+				}
 
 				// Recording user's answer
 				questionBank[i].setUserAnswer(userInput);
+				userInput = null;
 
 				System.out.println();
 			}
+			scanner.close();
 		}
-	}
 
 	// Function to grade the exam
 	public void gradeExam() {

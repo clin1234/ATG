@@ -1,6 +1,3 @@
-
-
-
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -11,8 +8,8 @@ public class ShortAnswer extends Question {
     }
 
     public boolean isCorrect() {
-        var userAns = new HashSet<>(Arrays.asList(getUserAnswer().toLowerCase().split(" |,|:|;|.|?|!")));
-        var expectedKw = new HashSet<>(Arrays.asList(super.getCorrectAnswer().toLowerCase().split(",")));
+        var userAns = new HashSet<>(Arrays.asList(getUserAnswer().toLowerCase().split(" |,|:|;|.|\\?|!")));
+        var expectedKw = new HashSet<>(Arrays.asList(getCorrectAnswer().toLowerCase().split(",")));
         return userAns.containsAll(expectedKw);
     }
 
