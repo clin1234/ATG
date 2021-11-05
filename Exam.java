@@ -122,28 +122,25 @@ public class Exam {
 	public void takeExam() {
 
 		// Creating Scanner object to read user's input
+		try (var scanner = new Scanner(System.in)) {
+			for (int i = 0; i < questionBank.length; i++) {
 
-		for (int i = 0; i < questionBank.length; i++) {
+				// Printing the question
+				System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
 
-			// Printing the question
-			System.out.println((i + 1) + ") " + questionBank[i].getQuestion());
+				// Print response options based on the object's type
+				questionBank[i].printOptions();
 
-			// Print response options based on the object's type
-			questionBank[i].printOptions();
+				// Waiting for user's input
+				System.out.print("Your Answer: ");
+				String userInput = scanner.nextLine();
 
-			// Waiting for user's input
-			System.out.print("Your Answer: ");
-			String userInput = "";
-			try (var scanner = new Scanner(System.in)) {
-				if (scanner.hasNextLine())
-					userInput = scanner.nextLine();
+				// Recording user's answer
+				questionBank[i].setUserAnswer(userInput);
+				userInput = null;
+
+				System.out.println();
 			}
-
-			// Recording user's answer
-			questionBank[i].setUserAnswer(userInput);
-			userInput = null;
-
-			System.out.println();
 		}
 	}
 
