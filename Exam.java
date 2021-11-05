@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -132,24 +133,52 @@ public class Exam {
 				questionBank[i].printOptions();
 
 				// Waiting for user's input
+				String userInput;
 				System.out.print("Your Answer: ");
-				String userInput = scanner.nextLine();
+				userInput = scanner.nextLine();
+				if (questionBank[i] instanceof MultipleChoice m)
+					while (!isValidInput(userInput, m))
+						userInput = scanner.nextLine();
+				else if (questionBank[i] instanceof TrueOrFalse t)
+					while (!isValidInput(userInput, t))
+						userInput = scanner.nextLine();
 
 				// Recording user's answer
 				questionBank[i].setUserAnswer(userInput);
-				userInput = null;
+				// userInput = null;
 
 				System.out.println();
 			}
 		}
 	}
 
+	public boolean isValidInput(String s, Question q) {
+		return true;
+	}
+
+	public boolean isValidInput(String s, MultipleChoice m) {
+		try {
+			int choice = Integer.parseInt(s);
+			return List.of(1, 2, 3, 4).contains(choice);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public boolean isValidInput(String s, TrueOrFalse q) {
+		return s.length() == 1 && List.of('a', 'b').contains(s.toLowerCase().charAt(0));
+	}
+
 	// Function to grade the exam
 	public void gradeExam() {
 
 		for (var question : questionBank) {
-			if (question instanceof ShortAnswer) {
-				if (((ShortAnswer) question).isCorrect())
+			/*
+			 * Feature in Java SE 16: pattern matching for instanceof No manual downcasting
+			 * needed.
+			 */
+			if (question instanceof ShortAnswer sa) {
+				if ((sa.isCorrect()))
 					userScore += QUESTION_WEIGHT;
 			}
 			// If user's recorded answer is the same as correct one, then...
