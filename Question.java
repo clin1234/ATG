@@ -17,10 +17,9 @@ public abstract class Question {
 	}
 
 	// Methods
-
-	public void printOptions() {
-	}
-
+	
+	public void printOptions() {}
+	
 	public void setSubject(String theSubject) {
 		subject = theSubject;
 	}
