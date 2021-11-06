@@ -52,4 +52,7 @@ public abstract class Question {
 		userAnswer = theUserAnswer;
 	}
 
+	public boolean isCorrect() {
+		return userAnswer.equals(correctAnswer);
+	}
 }

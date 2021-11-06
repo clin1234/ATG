@@ -1,7 +1,12 @@
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
+    private HashSet<String> userAns;
+    private HashSet<String> expectedKw;
+
     /**
      * 
      * @param theSubject  Subject
@@ -13,10 +18,18 @@ public class ShortAnswer extends Question {
         super(theSubString, theQuestion, String.join(",", keywords));
     }
 
+    @Override
     public boolean isCorrect() {
-        var userAns = new HashSet<>(Arrays.asList(getUserAnswer().toLowerCase().split(" |,|:|;|.|\\?|!")));
-        var expectedKw = new HashSet<>(Arrays.asList(getCorrectAnswer().toLowerCase().split(",")));
+        userAns = new HashSet<>(Stream.of(getUserAnswer().toLowerCase().split(",|:|;|.")).map(String::trim).toList());
+        expectedKw = new HashSet<>(Arrays.asList(getCorrectAnswer().toLowerCase().split(",")));
         return userAns.containsAll(expectedKw);
+    }
+
+    @Override
+    public String getCorrectAnswer() {
+        var tmpCopy = Set.copyOf(expectedKw);
+        expectedKw.removeAll(userAns);
+        return "Your answer is missing the following words: " + String.join(",", tmpCopy);
     }
 
 }
