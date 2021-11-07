@@ -5,14 +5,17 @@ public class AEG {
 
 	public static void main(String[] args) {
 		System.out.print("Enter your first and last name: ");
+		String name;
+		Exam e;
 		try (Scanner s = new Scanner(System.in)) {
-			String name = s.nextLine();
-			Exam e = new Exam(name, LocalDate.now().toString());
+			name = s.nextLine();
+			e = new Exam(name, LocalDate.now().toString());
 
 			e.takeExam();
 			e.gradeExam();
 			e.displayResult();
-
+			// Kludge
+			return;
 		}
 	}
 }

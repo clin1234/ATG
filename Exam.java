@@ -29,6 +29,7 @@ public class Exam {
 		// Setting exam taker's name and date test was taken
 		userName = theUser;
 		testDate = theTestDate;
+		// TODO: maybe in the future, store Qs in a file, then randomly choose 25?
 
 		// Creating Math Subject Question Objects
 		var Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
@@ -36,8 +37,7 @@ public class Exam {
 		var Math_ToF = new TrueOrFalse("Math", "Math is a universal language.", "True", "True", "False");
 		var Math_FiB = new FillInTheBlank("Math", "18 + 3 = ", "21");
 		var Math_SA = new ShortAnswer("Math",
-				"What statement from Cantor states that the set of all real numbers is uncountable?", "Cantor's",
-				"first");
+				"What statement from Cantor states that the set of all real numbers is uncountable?", "Cantor's first");
 
 		// Creating History Subject Question Objects
 		var History_MCQuestion1 = new MultipleChoice("History", "Who said \"I have a dream.\"?",
@@ -143,16 +143,12 @@ public class Exam {
 						userInput = scanner.nextLine();
 
 				// Recording user's answer
-				questionBank[i].setUserAnswer(userInput);
+				questionBank[i].setUserAnswer(userInput.toLowerCase());
 				// userInput = null;
 
 				System.out.println();
 			}
 		}
-	}
-
-	public boolean isValidInput(String s, Question q) {
-		return true;
 	}
 
 	public boolean isValidInput(String s, MultipleChoice m) {
@@ -165,30 +161,29 @@ public class Exam {
 	}
 
 	public boolean isValidInput(String s, TrueOrFalse q) {
-		return s.length() == 1 && List.of('a', 'b').contains(s.toLowerCase().charAt(0));
+		return List.of("false", "true").contains(s.toLowerCase());
 	}
 
 	// Function to grade the exam
 	public void gradeExam() {
-
-		for (var question : questionBank) {
-			/*
-			 * Feature in Java SE 16: pattern matching for instanceof No manual downcasting
-			 * needed.
-			 */
-			if (question instanceof ShortAnswer sa) {
-				if ((sa.isCorrect()))
-					userScore += QUESTION_WEIGHT;
-			}
-			// If user's recorded answer is the same as correct one, then...
-			else if (question.getUserAnswer().equals(question.getCorrectAnswer())) {
-				userScore += QUESTION_WEIGHT;
-			}
-		}
+		// The power of Streams...........
+		var correct = List.of(questionBank).parallelStream().filter(Question::isCorrect).count();
+		userScore += QUESTION_WEIGHT * correct;
 	}
 
 	// Print user's score on the test
 	public void displayResult() {
+		if (List.of(questionBank).parallelStream().filter(q -> !q.isCorrect()).count() != 0) {
+			System.out.println("Questions you answered incorrectly.");
+			for (short i = 0; i < questionBank.length; i++) {
+				var q = questionBank[i];
+				if (!q.isCorrect()) {
+					System.out.println((i + 1) + ") " + q.getQuestion());
+					System.out.println("Your answer: " + q.getUserAnswer());
+					System.out.println("Correct answer: " + q.getCorrectAnswer());
+				}
+			}
+		}
 		// For example purposes I'll be using System.out.println()
 		System.out.println("Name: " + userName);
 		// Prints out current date

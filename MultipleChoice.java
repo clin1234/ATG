@@ -48,4 +48,15 @@ public class MultipleChoice extends Question {
 		responseOptions[3] = choices[3];
 	}
 
+	@Override
+	public boolean isCorrect() {
+		var orig = super.getUserAnswer();
+		return getCorrectAnswer().equals(responseOptions[Short.parseShort(orig) - 1]);
+	}
+
+	@Override
+	public String getUserAnswer() {
+		var orig = super.getUserAnswer();
+		return orig + ". " + responseOptions[Short.parseShort(orig) - 1];
+	}
 }
