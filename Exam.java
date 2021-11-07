@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,9 +24,10 @@ public class Exam {
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
+	// private final boolean[] correct = new boolean[25];
 
 	// Maybe needed for todo below?
-	//private record Pair<F,S>(F first, S second){}
+	// private record Pair<F,S>(F first, S second){}
 
 	// Constructor
 
@@ -137,13 +141,17 @@ public class Exam {
 				// Waiting for user's input
 				String userInput;
 				System.out.print("Your Answer: ");
+				// while (!scanner.hasNext()) //{
 				userInput = scanner.nextLine();
 				if (questionBank[i] instanceof MultipleChoice m)
-					while (!isValidInput(userInput, m))
+					while (!isValidInput(userInput, m) // && scanner.hasNextLine()
+					)
 						userInput = scanner.nextLine();
 				else if (questionBank[i] instanceof TrueOrFalse t)
-					while (!isValidInput(userInput, t))
+					while (!isValidInput(userInput, t) // && scanner.hasNextLine()
+					)
 						userInput = scanner.nextLine();
+				// }
 
 				// Recording user's answer
 				questionBank[i].setUserAnswer(userInput.toLowerCase());
@@ -163,6 +171,8 @@ public class Exam {
 	}
 
 	public boolean isValidInput(String s, TrueOrFalse q) {
+		if (s == null)
+			return false;
 		return List.of("false", "true").contains(s.toLowerCase());
 	}
 
@@ -186,11 +196,22 @@ public class Exam {
 				}
 			}
 		}
-		// For example purposes I'll be using System.out.println()
-		System.out.println("Name: " + userName);
-		// Prints out current date
-		System.out.println("Date: " + testDate);
-		System.out.println("Score: " + userScore + "/" + MAX_SCORE);
+		System.out.println();
+		System.out.println(toString());
+	}
+
+	public void writeOut() throws IOException {
+		try (var pw = new PrintWriter(new FileWriter("db.csv", true))) {
+			pw.println("%s,%s,%d".formatted(userName, testDate, userScore));
+		}
+	}
+
+	public String toString() {
+		return  """
+				Name of test taker: %s
+				Date: %s
+				Score: %d / %d
+				""".formatted(userName, testDate, userScore, MAX_SCORE);
 	}
 
 	public String getUserName() {

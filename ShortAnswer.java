@@ -31,7 +31,7 @@ public class ShortAnswer extends Question {
 
     @Override
     public String getCorrectAnswer() {
-        return "Your answer is missing the following words: " + String.join(", ", missingPhrases);
+        return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
     }
 
 }
