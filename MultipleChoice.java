@@ -51,7 +51,7 @@ public class MultipleChoice extends Question {
 	@Override
 	public boolean isCorrect() {
 		var orig = super.getUserAnswer();
-		return getCorrectAnswer().equals(responseOptions[Short.parseShort(orig) - 1]);
+		return getCorrectAnswer().equals(responseOptions[Short.parseShort(orig) - 1].toLowerCase());
 	}
 
 	@Override

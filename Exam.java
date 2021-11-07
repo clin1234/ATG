@@ -22,6 +22,9 @@ public class Exam {
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
 
+	// Maybe needed for todo below?
+	//private record Pair<F,S>(F first, S second){}
+
 	// Constructor
 
 	public Exam(String theUser, String theTestDate) {
@@ -144,7 +147,6 @@ public class Exam {
 
 				// Recording user's answer
 				questionBank[i].setUserAnswer(userInput.toLowerCase());
-				// userInput = null;
 
 				System.out.println();
 			}

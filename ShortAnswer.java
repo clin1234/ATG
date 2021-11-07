@@ -1,10 +1,8 @@
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayDeque;
 import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
-    private HashSet<String> userAns;
-    private HashSet<String> expectedKw;
+    private ArrayDeque<String> missingPhrases;
 
     /**
      * 
@@ -21,19 +19,19 @@ public class ShortAnswer extends Question {
     public boolean isCorrect() {
         if (getUserAnswer() == null)
             return false;
-        userAns = new HashSet<>(Stream.of(getUserAnswer().toLowerCase().split(",|:|;|.")).map(String::trim).toList());
-        expectedKw = new HashSet<>(Arrays.asList(super.getCorrectAnswer().toLowerCase().split(", ")));
-        return userAns.containsAll(expectedKw);
+        var userAnswer = getUserAnswer();
+        var expectedKeywords = Stream.of(super.getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
+        missingPhrases = new ArrayDeque<>(expectedKeywords.length);
+        for (var phrase : expectedKeywords)
+            if (!userAnswer.contains(phrase))
+                missingPhrases.add(phrase);
+
+        return missingPhrases.size() == 0;
     }
 
     @Override
     public String getCorrectAnswer() {
-        if (getUserAnswer() == null || getUserAnswer().equals(""))
-            return "Your answer is missing the following words: " + super.getCorrectAnswer();
-        var tmpCopy = new HashSet<>(expectedKw);
-        tmpCopy.removeAll(userAns);
-        assert tmpCopy.size() < expectedKw.size();
-        return "Your answer is missing the following words: " + String.join(", ", tmpCopy);
+        return "Your answer is missing the following words: " + String.join(", ", missingPhrases);
     }
 
 }

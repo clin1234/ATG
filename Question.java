@@ -13,7 +13,7 @@ public abstract class Question {
 	public Question(String theSubject, String theQuestion, String theCorrectAnswer) {
 		subject = theSubject;
 		question = theQuestion;
-		correctAnswer = theCorrectAnswer;
+		correctAnswer = theCorrectAnswer.toLowerCase();
 	}
 
 	// Methods
