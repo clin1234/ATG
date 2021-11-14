@@ -1,8 +1,10 @@
-import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
-    private ArrayDeque<String> missingPhrases;
+    private HashSet<String> missingPhrases;
+    private HashSet<String> expectedKeywords;
 
     /**
      * 
@@ -11,26 +13,20 @@ public class ShortAnswer extends Question {
      * @param keywords    Keywords expected in the user's answer for the user's
      *                    answer to be deemed correct
      */
-    public ShortAnswer(String theSubString, String theQuestion, String... keywords) {
-        super(theSubString, theQuestion, String.join(", ", keywords));
+    public ShortAnswer(Exam.Subject theSubString, String theQuestion, String... keywords) {
+        super(theSubString, theQuestion);
+        expectedKeywords = Stream.of(keywords).map(String::trim).collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
-    public boolean isCorrect() {
-        if (getUserAnswer() == null)
-            return false;
-        var userAnswer = getUserAnswer();
-        var expectedKeywords = Stream.of(super.getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
-        missingPhrases = new ArrayDeque<>(expectedKeywords.length);
-        for (var phrase : expectedKeywords)
-            if (!userAnswer.contains(phrase))
-                missingPhrases.add(phrase);
+    public void checkAnswer(String input) {
+        missingPhrases = new HashSet<>(expectedKeywords.size());
+        expectedKeywords.parallelStream().filter(p -> !input.contains(p)).peek(missingPhrases::add);
 
-        return missingPhrases.size() == 0;
+        setCorrect(missingPhrases.size() == 0);
     }
 
-    @Override
-    public String getCorrectAnswer() {
+    public String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
     }
 
