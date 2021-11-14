@@ -6,11 +6,12 @@ public class TrueOrFalse extends Question {
 	private static final String FALSEOPTION = "False";
 
 	// Constructor
-	public TrueOrFalse(String theSubject, String theQuestion, String theCorrectAnswer, String TRUEOPTION,
+	public TrueOrFalse(Exam.Subject theSubject, String theQuestion, String theCorrectAnswer, String TRUEOPTION,
 			String FALSEOPTION) {
 
 		// Calling super-class' constructor
-		super(theSubject, theQuestion, theCorrectAnswer);
+		super(theSubject, theQuestion);
+		setCorrectAnswer(theCorrectAnswer.toLowerCase());
 	}
 
 	public void printOptions() {
@@ -19,6 +20,11 @@ public class TrueOrFalse extends Question {
 		System.out.println("A. " + TRUEOPTION);
 		System.out.println("B. " + FALSEOPTION);
 
+	}
+
+	@Override
+	public String showForWrongQ() {
+		return getCorrectAnswer();
 	}
 }
 

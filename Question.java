@@ -2,29 +2,30 @@ public abstract class Question {
 
 	// Data Members
 
-	private String subject;
+	private Exam.Subject subject;
 	private String question;
-	private String userAnswer;
 	private String correctAnswer;
+	private boolean correct;
 
 	// Constructor
 	// Used only to initialize variables for the subclasses
 
-	public Question(String theSubject, String theQuestion, String theCorrectAnswer) {
+	public Question(Exam.Subject theSubject, String theQuestion) {
 		subject = theSubject;
 		question = theQuestion;
-		correctAnswer = theCorrectAnswer.toLowerCase();
+		//correctAnswer = theCorrectAnswer.toLowerCase();
 	}
 
 	// Methods
-	
-	public void printOptions() {}
-	
-	public void setSubject(String theSubject) {
+
+	public void printOptions() {
+	}
+
+	public void setSubject(Exam.Subject theSubject) {
 		subject = theSubject;
 	}
 
-	public String getSubject() {
+	public Exam.Subject getSubject() {
 		return subject;
 	}
 
@@ -44,15 +45,17 @@ public abstract class Question {
 		return correctAnswer;
 	}
 
-	public String getUserAnswer() {
-		return userAnswer;
+	public void checkAnswer(String userAns) {
+		setCorrect(userAns.equals(correctAnswer));
 	}
 
-	public void setUserAnswer(String theUserAnswer) {
-		userAnswer = theUserAnswer;
+	public abstract String showForWrongQ();
+
+	public void setCorrect(boolean b) {
+		correct = b;
 	}
 
 	public boolean isCorrect() {
-		return userAnswer.equals(correctAnswer);
+		return correct;
 	}
 }

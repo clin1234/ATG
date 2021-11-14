@@ -3,7 +3,7 @@ public class MultipleChoice extends Question {
 
 	// Data Members
 
-	private String[] responseOptions = new String[4];
+	private String[] responseOptions;
 
 	// Constructor
 	/**
@@ -13,16 +13,14 @@ public class MultipleChoice extends Question {
 	 * @param theCorrectAnswer Correct choice
 	 * @param chocies          Response options
 	 */
-	public MultipleChoice(String theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
+	public MultipleChoice(Exam.Subject theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 
 		// Calling super-class' constructor
-		super(theSubject, theQuestion, theCorrectAnswer);
+		super(theSubject, theQuestion);
+		setCorrectAnswer(theCorrectAnswer);
 
 		// Adding responses options to the array
-		responseOptions[0] = choices[0];
-		responseOptions[1] = choices[1];
-		responseOptions[2] = choices[2];
-		responseOptions[3] = choices[3];
+		responseOptions = choices;
 	}
 
 	// Methods
@@ -41,22 +39,17 @@ public class MultipleChoice extends Question {
 	}
 
 	public void setResponseOptions(String... choices) {
-
-		responseOptions[0] = choices[0];
-		responseOptions[1] = choices[1];
-		responseOptions[2] = choices[2];
-		responseOptions[3] = choices[3];
+		responseOptions = choices;
 	}
 
 	@Override
-	public boolean isCorrect() {
-		var orig = super.getUserAnswer();
-		return getCorrectAnswer().equals(responseOptions[Short.parseShort(orig) - 1].toLowerCase());
+	public void checkAnswer(String s) {
+		setCorrect(getCorrectAnswer().equals(responseOptions[Short.parseShort(s) - 1].toLowerCase()));
 	}
 
 	@Override
-	public String getUserAnswer() {
-		var orig = super.getUserAnswer();
-		return orig + ". " + responseOptions[Short.parseShort(orig) - 1];
+	public String showForWrongQ() {
+		var s = getCorrectAnswer();
+		return s + ". " + responseOptions[Short.parseShort(s) - 1];
 	}
 }

@@ -29,5 +29,4 @@ public class ShortAnswer extends Question {
     public String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
     }
-
 }
