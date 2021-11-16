@@ -11,7 +11,7 @@ public class MultipleChoice extends Question {
 	 * @param theSubject       Subject
 	 * @param theQuestion      Question
 	 * @param theCorrectAnswer Correct choice
-	 * @param chocies          Response options
+	 * @param choices          Response options
 	 */
 	public MultipleChoice(Exam.Subject theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 

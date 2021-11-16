@@ -30,7 +30,7 @@ public class AEG {
 
 		var inputFile = Path.of(args[args.length - 1]);
 		if (Files.notExists(inputFile))
-			throw new NoSuchFileException(inputFile.toString()+ " does not exist.");
+			throw new NoSuchFileException(inputFile + " does not exist.");
 		
 		var contents = Files.readString(inputFile);
 		String[] splitter = contents.split("\\R", 2);
@@ -60,9 +60,9 @@ public class AEG {
 			list[i] = Short.parseShort(a[2]);
 		}
 		double as = IntStream.of(list).average().getAsDouble();
-		System.out.println("""
+		System.out.printf("""
 				Number of test takers: %d
 				Average score: %.1f / 25 (%.1f%%)
-				""".formatted(list.length, as, as * 4d));
+				%n""", list.length, as, as * 4d);
 	}
 }

@@ -17,8 +17,8 @@ public class Exam {
 
 	// Data Members
 
-	private String userName;
-	private String testDate;
+	private final String userName;
+	private final String testDate;
 	private int userScore = 0;
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
@@ -26,7 +26,7 @@ public class Exam {
 
 	enum Subject {
 		Math, Science, History, Geography, Arts
-	};
+	}
 
 	// Temporary to hold user's answer
 	String userAnswer;
@@ -166,7 +166,7 @@ public class Exam {
 
 	// Print user's score on the test
 	public void displayResult(String... ans) {
-		if (List.of(questionBank).parallelStream().filter(q -> !q.isCorrect()).count() != 0) {
+		if (List.of(questionBank).parallelStream().anyMatch(q -> !q.isCorrect())) {
 			System.out.println("Questions you answered incorrectly.");
 			for (short i = 0; i < questionBank.length; i++) {
 				var q = questionBank[i];
@@ -178,7 +178,7 @@ public class Exam {
 			}
 		}
 		System.out.println();
-		System.out.println(toString());
+		System.out.println(this);
 	}
 
 	public void writeOut() throws IOException {
