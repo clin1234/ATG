@@ -23,7 +23,10 @@ public class Exam {
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
-	enum Subject {Math, Science, History, Geography, Arts};
+
+	enum Subject {
+		Math, Science, History, Geography, Arts
+	};
 
 	// Temporary to hold user's answer
 	String userAnswer;
@@ -45,19 +48,21 @@ public class Exam {
 		var Math_MCQuestion1 = new MultipleChoice(Subject.Math, "What is 2 + 2?", "4", "1", "2", "3", "4");
 		var Math_MCQUestion2 = new MultipleChoice(Subject.Math, "What is 10 * 10?", "100", "0", "100", "1000", "010");
 		var Math_ToF = new TrueOrFalse(Subject.Math, "Math is a universal language.", "True", "True", "False");
-		var Math_FiB = new FillInTheBlank(Subject.Math, "18 + 3 = ", "21");
+		var Math_FiB = new FillInTheBlank(Subject.Math, "_____'s rule allows evaluating ____ of ____ forms",
+				"L'Hopital", "limits", "indeterminate");
 		var Math_SA = new ShortAnswer(Subject.Math,
 				"What statement from Cantor states that the set of all real numbers is uncountable?", "Cantor's first");
 
 		// Creating History Subject Question Objects
 		var History_MCQuestion1 = new MultipleChoice(Subject.History, "Who said \"I have a dream.\"?",
 				"Martin Luther King Jr.", "Ghandi.", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks.");
-		var History_MCQUestion2 = new MultipleChoice(Subject.History, "In which year did the first man walk on the moon?",
-				"1969", "1969", "1960", "1925", "1989");
-		var History_ToF = new TrueOrFalse(Subject.History, "California and Texas were once part of Mexico.", "True", "True",
-				"False");
-		var History_FiB = new FillInTheBlank(Subject.History, "When looking at ancient history, BC stands for ",
-				"Before Christ");
+		var History_MCQUestion2 = new MultipleChoice(Subject.History,
+				"In which year did the first man walk on the moon?", "1969", "1969", "1960", "1925", "1989");
+		var History_ToF = new TrueOrFalse(Subject.History, "California and Texas were once part of Mexico.", "True",
+				"True", "False");
+		var History_FiB = new FillInTheBlank(Subject.History,
+				"In the early 1990s, the two most common families of Unix systems were ___ and ___ ", "System V UNIX",
+				"BSD");
 		var History_SA = new ShortAnswer(Subject.History,
 				"In 1955, when the Warsaw Pact was founded, who were its founding members?", "Albania", "East Germany",
 				"Czechoslovakia", "Poland", "Hungary", "Albania", "Bulgaria", "Romania", "Soviet Union");
@@ -65,35 +70,36 @@ public class Exam {
 		// Creating Science Subject Question Objects
 		var Science_MCQuestion1 = new MultipleChoice(Subject.Science,
 				"Approximately, how many bones does the human body have?", "206", "206", "301", "167", "269");
-		var Science_MCQuestion2 = new MultipleChoice(Subject.Science, "AU is an abbreviation for which chemical element?",
-				"Gold", "Silver", "Gold", "Bronze", "Mercury");
-		var Science_ToF = new TrueOrFalse(Subject.Science, "The average human body has an average of 46 chromosomes.", "True",
-				"True", "False");
+		var Science_MCQuestion2 = new MultipleChoice(Subject.Science,
+				"AU is an abbreviation for which chemical element?", "Gold", "Silver", "Gold", "Bronze", "Mercury");
+		var Science_ToF = new TrueOrFalse(Subject.Science, "The average human body has an average of 46 chromosomes.",
+				"True", "True", "False");
 		var Science_FiB = new FillInTheBlank(Subject.Science,
-				"The smallest particle of an element is also known as a/an _____", "atom");
-		var Science_SA = new ShortAnswer(Subject.Science, "In words (no variables), describe Newton's 2nd law of motion",
-				"net force", "mass", "acceleration");
+				"The first 3 elements on the periodic table are _____, ____, and ____", "hydrogen", "helium",
+				"lithium");
+		var Science_SA = new ShortAnswer(Subject.Science,
+				"In words (no variables), describe Newton's 2nd law of motion", "net force", "mass", "acceleration");
 
 		// Creating Arts Subject Question Objects
-		var Arts_MCQuestion1 = new MultipleChoice(Subject.Arts, "How many strings does a cello have?", "4", "4", "6", "10",
-				"2");
-		var Arts_MCQuestion2 = new MultipleChoice(Subject.Arts, "Nike was the goddess of what?", "Victory", "Love", "War",
-				"Victory", "Nature");
+		var Arts_MCQuestion1 = new MultipleChoice(Subject.Arts, "How many strings does a cello have?", "4", "4", "6",
+				"10", "2");
+		var Arts_MCQuestion2 = new MultipleChoice(Subject.Arts, "Nike was the goddess of what?", "Victory", "Love",
+				"War", "Victory", "Nature");
 		var Arts_ToF = new TrueOrFalse(Subject.Arts, "The Monalisa does not have eyebrows.", "True", "True", "False");
-		var Arts_FiB = new FillInTheBlank(Subject.Arts, "____ is the color we get when mixing red and blue together.",
-				"Violet");
+		var Arts_FiB = new FillInTheBlank(Subject.Arts, "The three primary colors are ___, ____, and  ____", "red",
+				"blue", "yellow");
 		var Arts_SA = new ShortAnswer(Subject.Arts, "In what battle and war was Picasso's \"Guernica\" set in?",
 				"Bombing of Guernica", "Spanish Civil War");
 
 		// Creating Geography Subject Question Objects
 		var Geography_MCQuestion1 = new MultipleChoice(Subject.Geography, "Where is the Capoeira dance from?", "Brazil",
 				"Mexico", "Brazil", "South Africa", "Venezuela");
-		var Geography_MCQuestion2 = new MultipleChoice(Subject.Geography, "How many continents are there?", "7", "5", "6",
-				"7", "8");
+		var Geography_MCQuestion2 = new MultipleChoice(Subject.Geography, "How many continents are there?", "7", "5",
+				"6", "7", "8");
 		var Geography_ToF = new TrueOrFalse(Subject.Geography,
 				"India is the country with the highest population in the world.", "False", "True", "False");
-		var Geography_FiB = new FillInTheBlank(Subject.Geography, "The biggest state in the United States is _____",
-				"Alaska");
+		var Geography_FiB = new FillInTheBlank(Subject.Geography,
+				"The two most recently admitted states in the United States are _____ and _____", "Alaska", "Hawaii");
 		var Geography_SA = new ShortAnswer(Subject.Geography,
 				"Which countries claim to be the legitimate government of China? Write their official names.",
 				"People's Republic of China", "Republic of China");
@@ -182,7 +188,7 @@ public class Exam {
 	}
 
 	public String toString() {
-		return  """
+		return """
 				Name of test taker: %s
 				Date: %s
 				Score: %d / %d
