@@ -3,7 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayDeque;
+import java.util.stream.IntStream;
 
 public class AEG {
 
@@ -53,16 +53,16 @@ public class AEG {
 			System.err.println("Try taking the test, buddy. Nothing to pry open with your wily eyes, eh?");
 			return;
 		}
-		var list = new ArrayDeque<Short>(db.size());
-		for (var v : db) {
-			var a = v.split(",");
+		int[] list = new int[db.size()];
+		for (var i = 0; i < db.size(); i++) {
+			var a = db.get(i).split(",");
 			// var u = new User(a[0], a[1], Short.parseShort(a[2]));
-			list.add(Short.parseShort(a[2]));
+			list[i] = Short.parseShort(a[2]);
 		}
-		double as = list.parallelStream().mapToInt(n -> n).average().getAsDouble();
+		double as = IntStream.of(list).average().getAsDouble();
 		System.out.println("""
 				Number of test takers: %d
 				Average score: %.1f / 25 (%.1f%%)
-				""".formatted(list.size(), as, as * 4d));
+				""".formatted(list.length, as, as * 4d));
 	}
 }
