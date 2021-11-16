@@ -24,6 +24,8 @@ public class Exam {
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
+	private final String[] questionAnswers = new String[25];
+
 	// private final boolean[] correct = new boolean[25];
 
 	// Maybe needed for todo below?
@@ -37,6 +39,7 @@ public class Exam {
 		userName = theUser;
 		testDate = theTestDate;
 		// TODO: maybe in the future, store Qs in a file, then randomly choose 25?
+		//I like this idea...but there is no future LOL -BD
 
 		// Creating Math Subject Question Objects
 		var Math_MCQuestion1 = new MultipleChoice("Math", "What is 2 + 2?", "4", "1", "2", "3", "4");
@@ -81,7 +84,6 @@ public class Exam {
 				"Violet");
 		var Arts_SA = new ShortAnswer("Arts", "In what battle and war was Picasso's \"Guernica\" set in?",
 				"Bombing of Guernica", "Spanish Civil War");
-
 		// Creating Geography Subject Question Objects
 		var Geography_MCQuestion1 = new MultipleChoice("Geography", "Where is the Capoeira dance from?", "Brazil",
 				"Mexico", "Brazil", "South Africa", "Venezuela");
@@ -121,7 +123,46 @@ public class Exam {
 		questionBank[22] = Geography_ToF;
 		questionBank[23] = Geography_FiB;
 		questionBank[24] = Geography_SA;
+
+		//Filling questionAnswers with the correct answers
+		//Math
+		questionAnswers[0] = "4";
+		questionAnswers[1] = "100";
+		questionAnswers[2] = "True";
+		questionAnswers[3] = "21";
+		questionAnswers[4] = "Cantor's first";
+
+		//History
+		questionAnswers[5] = "Martin Luther King Jr.";
+		questionAnswers[6] = "1969";
+		questionAnswers[7] = "True";
+		questionAnswers[8] = "Before Christ";
+		questionAnswers[9] = "Albania East Germany Czechoslovakia Poland Hungary Albania Bulgaria Romania Soviet Union";
+
+		//Science
+		questionAnswers[10] = "206";
+		questionAnswers[11] = "Gold";
+		questionAnswers[12] = "True";
+		questionAnswers[13] = "atom";
+		questionAnswers[14] = "net force mass acceleration";
+
+		//Arts
+		questionAnswers[15] = "4";
+		questionAnswers[16] = "Victory";
+		questionAnswers[17] = "True";
+		questionAnswers[18] = "Violet";
+		questionAnswers[19] = "Bombing of Guernica Spanish Civil War";
+
+		//Geography
+		questionAnswers[20] = "Brazil";
+		questionAnswers[21] = "7";
+		questionAnswers[22] = "False";
+		questionAnswers[23] = "Alaska";
+		questionAnswers[24] = "People's Republic of China Republic of China";
+
 	}
+
+	
 
 	// Methods
 

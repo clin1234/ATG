@@ -20,7 +20,7 @@ public class ShortAnswer extends Question {
         if (getUserAnswer() == null)
             return false;
         var userAnswer = getUserAnswer();
-        var expectedKeywords = Stream.of(super.getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
+        var expectedKeywords = Stream.of(getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
         missingPhrases = new ArrayDeque<>(expectedKeywords.length);
         for (var phrase : expectedKeywords)
             if (!userAnswer.contains(phrase))
