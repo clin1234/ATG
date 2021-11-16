@@ -1,0 +1,6 @@
+Koli Nolv
+3;4; true;21; Cnayot's firsy set
+2; 4; false;before christ;idk
+1;1;true;atom;net force = mass * acceleration
+1;1;true;violet;bombing of guernica, spanish civil war
+1;3;false;Alaska;Two chinas
