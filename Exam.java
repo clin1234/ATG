@@ -1,7 +1,11 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
  * Notes:
@@ -19,14 +23,19 @@ public class Exam {
 
 	private final String userName;
 	private final String testDate;
-	private int userScore = 0;
+	// private int userScore = 0;
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
 
-	enum Subject {
+	public static enum Subject {
 		Math, Science, History, Geography, Arts
 	}
+
+	public final static EnumMap<Subject, String> subjectNames = new EnumMap<>(Map.of(Subject.Math, "Math", Subject.Arts,
+			"Arts", Subject.Geography, "Geography", Subject.History, "History", Subject.Science, "Science"));
+
+	private EnumMap<Subject, Integer> subjectScores;
 
 	// Temporary to hold user's answer
 	String userAnswer;
@@ -159,9 +168,19 @@ public class Exam {
 
 	// Function to grade the exam
 	public void gradeExam() {
+		/*
+		 * Keep only correctly-answered questions, count number of questions answered
+		 * correctly per subject, and store in EnumMap, with keys being the subjects and
+		 * values being their per subject score
+		 */
+		subjectScores = Arrays.stream(questionBank).filter(Question::isCorrect)
+				.collect(Collectors.groupingBy(q -> q.getSubject(), () -> new EnumMap<>(Subject.class),
+						Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
+
 		// The power of Streams...........
-		var correct = List.of(questionBank).parallelStream().filter(Question::isCorrect).count();
-		userScore += QUESTION_WEIGHT * correct;
+		// var correct =
+		// List.of(questionBank).parallelStream().filter(Question::isCorrect).count();
+		// userScore += QUESTION_WEIGHT * correct;
 	}
 
 	// Print user's score on the test
@@ -178,21 +197,29 @@ public class Exam {
 			}
 		}
 		System.out.println();
-		System.out.println(this);
+		System.out.println(printExamResult());
 	}
 
 	public void writeOut() throws IOException {
+		var p = subjectScores.values().parallelStream().map(n -> String.valueOf(n)).collect(Collectors.joining(","));
 		try (var pw = new PrintWriter(new FileWriter("db.csv", true))) {
-			pw.println("%s,%s,%d".formatted(userName, testDate, userScore));
+			pw.println("%s,%s,%s".formatted(userName, testDate, p));
 		}
 	}
 
-	public String toString() {
+	public String printExamResult() {
+		var sb = new StringBuilder(30);
+		for (var s : Subject.values())
+			sb.append("%s: %d / 5%n".formatted(subjectNames.get(s), subjectScores.get(s)));
+		var f = sb.toString();
+
+		final var sum = subjectScores.values().stream().mapToLong(n -> n).sum();
 		return """
 				Name of test taker: %s
 				Date: %s
-				Score: %d / %d
-				""".formatted(userName, testDate, userScore, MAX_SCORE);
+				""".formatted(userName, testDate) + f + """
+				Total: %d / %d
+				""".formatted(sum, MAX_SCORE);
 	}
 
 	public String getUserName() {
