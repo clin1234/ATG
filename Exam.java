@@ -21,10 +21,10 @@ public class Exam {
 	private String userName;
 	private String testDate;
 	private int userScore = 0;
+	private static String userAnswer;
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
-	private final String[] questionAnswers = new String[25];
 
 	// private final boolean[] correct = new boolean[25];
 
@@ -124,42 +124,6 @@ public class Exam {
 		questionBank[23] = Geography_FiB;
 		questionBank[24] = Geography_SA;
 
-		//Filling questionAnswers with the correct answers
-		//Math
-		questionAnswers[0] = "4";
-		questionAnswers[1] = "100";
-		questionAnswers[2] = "True";
-		questionAnswers[3] = "21";
-		questionAnswers[4] = "Cantor's first";
-
-		//History
-		questionAnswers[5] = "Martin Luther King Jr.";
-		questionAnswers[6] = "1969";
-		questionAnswers[7] = "True";
-		questionAnswers[8] = "Before Christ";
-		questionAnswers[9] = "Albania East Germany Czechoslovakia Poland Hungary Albania Bulgaria Romania Soviet Union";
-
-		//Science
-		questionAnswers[10] = "206";
-		questionAnswers[11] = "Gold";
-		questionAnswers[12] = "True";
-		questionAnswers[13] = "atom";
-		questionAnswers[14] = "net force mass acceleration";
-
-		//Arts
-		questionAnswers[15] = "4";
-		questionAnswers[16] = "Victory";
-		questionAnswers[17] = "True";
-		questionAnswers[18] = "Violet";
-		questionAnswers[19] = "Bombing of Guernica Spanish Civil War";
-
-		//Geography
-		questionAnswers[20] = "Brazil";
-		questionAnswers[21] = "7";
-		questionAnswers[22] = "False";
-		questionAnswers[23] = "Alaska";
-		questionAnswers[24] = "People's Republic of China Republic of China";
-
 	}
 
 	
@@ -195,7 +159,7 @@ public class Exam {
 				// }
 
 				// Recording user's answer
-				questionBank[i].setUserAnswer(userInput.toLowerCase());
+				setUserAnswer(userInput.toLowerCase());
 
 				System.out.println();
 			}
@@ -220,19 +184,19 @@ public class Exam {
 	// Function to grade the exam
 	public void gradeExam() {
 		// The power of Streams...........
-		var correct = List.of(questionBank).parallelStream().filter(Question::isCorrect).count();
+		var correct = List.of(questionBank).parallelStream().filter(Question -> isCorrect()).count();
 		userScore += QUESTION_WEIGHT * correct;
 	}
 
 	// Print user's score on the test
 	public void displayResult() {
-		if (List.of(questionBank).parallelStream().filter(q -> !q.isCorrect()).count() != 0) {
+		if (List.of(questionBank).parallelStream().filter(q -> !isCorrect(q)).count() != 0) {
 			System.out.println("Questions you answered incorrectly.");
 			for (short i = 0; i < questionBank.length; i++) {
 				var q = questionBank[i];
-				if (!q.isCorrect()) {
+				if (!isCorrect(q)) {
 					System.out.println((i + 1) + ") " + q.getQuestion());
-					System.out.println("Your answer: " + q.getUserAnswer());
+					System.out.println("Your answer: " + getUserAnswer());
 					System.out.println("Correct answer: " + q.getCorrectAnswer());
 				}
 			}
@@ -270,5 +234,18 @@ public class Exam {
 	public int getQUESTION_WEIGHT() {
 		return QUESTION_WEIGHT;
 	}
+
+	public static String getUserAnswer() {
+		return userAnswer;
+	}
+
+	public static void setUserAnswer(String theUserAnswer) {
+		userAnswer = theUserAnswer;
+	}
+
+	public boolean isCorrect(Question a) {
+		return userAnswer.equals(a.getCorrectAnswer());
+	}
+	
 
 }

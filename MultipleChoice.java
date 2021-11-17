@@ -48,15 +48,13 @@ public class MultipleChoice extends Question {
 		responseOptions[3] = choices[3];
 	}
 
-	@Override
-	public boolean isCorrect() {
-		var orig = super.getUserAnswer();
+	public boolean isCorrect(Question a) {
+		var orig = Exam.getUserAnswer();
 		return getCorrectAnswer().equals(responseOptions[Short.parseShort(orig) - 1].toLowerCase());
 	}
 
-	@Override
 	public String getUserAnswer() {
-		var orig = super.getUserAnswer();
+		var orig = Exam.getUserAnswer();
 		return orig + ". " + responseOptions[Short.parseShort(orig) - 1];
 	}
 }
