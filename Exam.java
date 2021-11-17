@@ -64,7 +64,7 @@ public class Exam {
 
 		// Creating History Subject Question Objects
 		var History_MCQuestion1 = new MultipleChoice(Subject.History, "Who said \"I have a dream.\"?",
-				"Martin Luther King Jr.", "Ghandi.", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks.");
+				"Martin Luther King Jr.", "Gandhi.", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks.");
 		var History_MCQUestion2 = new MultipleChoice(Subject.History,
 				"In which year did the first man walk on the moon?", "1969", "1969", "1960", "1925", "1989");
 		var History_ToF = new TrueOrFalse(Subject.History, "California and Texas were once part of Mexico.", "True",
@@ -174,7 +174,7 @@ public class Exam {
 		 * values being their per subject score
 		 */
 		subjectScores = Arrays.stream(questionBank).filter(Question::isCorrect)
-				.collect(Collectors.groupingBy(q -> q.getSubject(), () -> new EnumMap<>(Subject.class),
+				.collect(Collectors.groupingBy(Question::getSubject, () -> new EnumMap<>(Subject.class),
 						Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
 
 		// The power of Streams...........
@@ -201,7 +201,7 @@ public class Exam {
 	}
 
 	public void writeOut() throws IOException {
-		var p = subjectScores.values().parallelStream().map(n -> String.valueOf(n)).collect(Collectors.joining(","));
+		var p = subjectScores.values().parallelStream().map(String::valueOf).collect(Collectors.joining(","));
 		try (var pw = new PrintWriter(new FileWriter("db.csv", true))) {
 			pw.println("%s,%s,%s".formatted(userName, testDate, p));
 		}
