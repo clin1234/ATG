@@ -184,8 +184,13 @@ public class Exam {
 	// Function to grade the exam
 	public void gradeExam() {
 		// The power of Streams...........
-		var correct = List.of(questionBank).parallelStream().filter(Question -> isCorrect()).count();
+		var correct = List.of(questionBank).parallelStream().filter(q -> isCorrect(q)).count();
+		System.out.println(correct);
 		userScore += QUESTION_WEIGHT * correct;
+
+		// for (Question q : questionBank) {
+
+		// }
 	}
 
 	// Print user's score on the test
