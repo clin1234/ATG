@@ -1,13 +1,11 @@
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class AEG {
     private static final Pattern COMPILE = Pattern.compile("\\R");
@@ -21,7 +19,7 @@ public class AEG {
      * e.takeExam(); e.gradeExam(); e.displayResult(); // Kludge return; } }
      */
 
-    public static void main(String[] args) throws IOException, NoSuchFileException {
+    public static void main(String[] args) throws IOException {
         // Insert name of file containing user answers here.
         var inputFile = Path.of("actually_right1.txt");
         assert !Files.notExists(inputFile) : inputFile + " does not exist.";

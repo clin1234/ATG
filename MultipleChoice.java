@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Locale;
 
 public class MultipleChoice extends Question {
 
