@@ -28,14 +28,14 @@ public class Exam {
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
 
-	public static enum Subject {
+	public enum Subject {
 		Math, Science, History, Geography, Arts
 	}
 
 	public final static EnumMap<Subject, String> subjectNames = new EnumMap<>(Map.of(Subject.Math, "Math", Subject.Arts,
 			"Arts", Subject.Geography, "Geography", Subject.History, "History", Subject.Science, "Science"));
 
-	private EnumMap<Subject, Integer> subjectScores;
+	private EnumMap<Subject, Integer> subjectScores = null;
 
 	// Temporary to hold user's answer
 	String userAnswer;
@@ -146,9 +146,7 @@ public class Exam {
 	// Function to print questions and read user's input
 	public void takeExam(String... ans) {
 		assert ans.length == questionBank.length;
-		for (int i = 0; i < questionBank.length; i++) {
-			questionBank[i].checkAnswer(ans[i]);
-		}
+		for (int i = 0; i < questionBank.length; i++) questionBank[i].checkAnswer(ans[i]);
 	}
 
 	public boolean isValidInput(String s, MultipleChoice m) {
@@ -230,11 +228,11 @@ public class Exam {
 		return testDate;
 	}
 
-	public int getMAX_SCORE() {
+	public static int getMAX_SCORE() {
 		return MAX_SCORE;
 	}
 
-	public int getQUESTION_WEIGHT() {
+	public static int getQUESTION_WEIGHT() {
 		return QUESTION_WEIGHT;
 	}
 

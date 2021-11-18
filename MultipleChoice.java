@@ -1,9 +1,12 @@
+import java.util.Arrays;
+import java.util.Locale;
 
 public class MultipleChoice extends Question {
 
 	// Data Members
 
 	private String[] responseOptions;
+	private String correctAnswer;
 
 	// Constructor
 	/**
@@ -17,21 +20,20 @@ public class MultipleChoice extends Question {
 
 		// Calling super-class' constructor
 		super(theSubject, theQuestion);
-		setCorrectAnswer(theCorrectAnswer);
+		correctAnswer = theCorrectAnswer.toLowerCase();
 
 		// Adding responses options to the array
-		responseOptions = choices;
+		responseOptions = Arrays.stream(choices).map(String::toLowerCase).toArray(String[]::new);
 	}
 
 	// Methods
 
 	// Printing all response options
+	@Override
 	public void printOptions() {
-		for (int i = 0; i < responseOptions.length; i++) {
-
-			// For example purposes I'll be using System.out.println()
+		// For example purposes I'll be using System.out.println()
+		for (int i = 0; i < responseOptions.length; i++)
 			System.out.println("   " + (i + 1) + ". " + responseOptions[i]);
-		}
 	}
 
 	public String[] getResponseOptions() {
@@ -44,12 +46,11 @@ public class MultipleChoice extends Question {
 
 	@Override
 	public void checkAnswer(String s) {
-		setCorrect(getCorrectAnswer().equals(responseOptions[Short.parseShort(s) - 1].toLowerCase()));
+		setCorrect(correctAnswer.equals(responseOptions[Short.parseShort(s) - 1]));
 	}
 
 	@Override
 	public String showForWrongQ() {
-		var s = getCorrectAnswer();
-		return s + ". " + responseOptions[Short.parseShort(s) - 1];
+		return (Arrays.asList(responseOptions).indexOf(correctAnswer)+1) + ". " + correctAnswer;
 	}
 }

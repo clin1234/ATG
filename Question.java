@@ -4,7 +4,6 @@ public abstract class Question {
 
 	private Exam.Subject subject;
 	private String question;
-	private String correctAnswer;
 	private boolean correct;
 
 	// Constructor
@@ -13,7 +12,6 @@ public abstract class Question {
 	public Question(Exam.Subject theSubject, String theQuestion) {
 		subject = theSubject;
 		question = theQuestion;
-		//correctAnswer = theCorrectAnswer.toLowerCase();
 	}
 
 	// Methods
@@ -37,17 +35,7 @@ public abstract class Question {
 		return question;
 	}
 
-	public void setCorrectAnswer(String theCorrectAnswer) {
-		correctAnswer = theCorrectAnswer;
-	}
-
-	public String getCorrectAnswer() {
-		return correctAnswer;
-	}
-
-	public void checkAnswer(String userAns) {
-		setCorrect(userAns.equals(correctAnswer));
-	}
+	public abstract void checkAnswer(String userAns);
 
 	public abstract String showForWrongQ();
 

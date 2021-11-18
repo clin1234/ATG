@@ -23,9 +23,10 @@ public class ShortAnswer extends Question {
         missingPhrases = new HashSet<>(expectedKeywords.size());
         expectedKeywords.parallelStream().filter(p -> !input.contains(p)).peek(missingPhrases::add);
 
-        setCorrect(missingPhrases.size() == 0);
+        setCorrect(missingPhrases.isEmpty());
     }
 
+    @Override
     public String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
     }
