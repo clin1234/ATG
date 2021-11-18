@@ -21,6 +21,7 @@ public class Exam {
 	private String userName;
 	private String testDate;
 	private int userScore = 0;
+	private static String userAnswer;
 	private final static int MAX_SCORE = 25;
 	private final static int QUESTION_WEIGHT = 1;
 	private final Question[] questionBank = new Question[25];
@@ -195,7 +196,7 @@ public class Exam {
 				// }
 
 				// Recording user's answer
-				questionBank[i].setUserAnswer(userInput.toLowerCase());
+				setUserAnswer(userInput.toLowerCase());
 
 				System.out.println();
 			}
@@ -232,7 +233,7 @@ public class Exam {
 				var q = questionBank[i];
 				if (!q.isCorrect()) {
 					System.out.println((i + 1) + ") " + q.getQuestion());
-					System.out.println("Your answer: " + q.getUserAnswer());
+					System.out.println("Your answer: " + getUserAnswer());
 					System.out.println("Correct answer: " + q.getCorrectAnswer());
 				}
 			}
@@ -269,6 +270,14 @@ public class Exam {
 
 	public int getQUESTION_WEIGHT() {
 		return QUESTION_WEIGHT;
+	}
+
+	public static String getUserAnswer() {
+		return userAnswer;
+	}
+
+	public static void setUserAnswer(String theUserAnswer) {
+		userAnswer = theUserAnswer;
 	}
 
 }

@@ -4,7 +4,6 @@ public abstract class Question {
 
 	private String subject;
 	private String question;
-	private String userAnswer;
 	private String correctAnswer;
 
 	// Constructor
@@ -44,15 +43,9 @@ public abstract class Question {
 		return correctAnswer;
 	}
 
-	public String getUserAnswer() {
-		return userAnswer;
-	}
 
-	public void setUserAnswer(String theUserAnswer) {
-		userAnswer = theUserAnswer;
-	}
 
 	public boolean isCorrect() {
-		return userAnswer.equals(correctAnswer);
+		return Exam.getUserAnswer().equals(correctAnswer);
 	}
 }
