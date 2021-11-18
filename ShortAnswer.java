@@ -15,11 +15,11 @@ public class ShortAnswer extends Question {
         super(theSubString, theQuestion, String.join(", ", keywords));
     }
 
-    public boolean isCorrect(Question a) {
+    public boolean isCorrect() {
         if (Exam.getUserAnswer() == null)
             return false;
         var userAnswer = Exam.getUserAnswer();
-        var expectedKeywords = Stream.of(getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
+        var expectedKeywords = Stream.of(super.getCorrectAnswer().split(", ")).map(String::trim).toArray(String[]::new);
         missingPhrases = new ArrayDeque<>(expectedKeywords.length);
         for (var phrase : expectedKeywords)
             if (!userAnswer.contains(phrase))

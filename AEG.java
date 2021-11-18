@@ -40,7 +40,6 @@ public class AEG {
 			if (res.equals("yes")) {
 				Exam e = new Exam(name, LocalDate.now().toString());
 				e.takeExam();
-	
 				e.writeOut();
 				e.displayResult();
 				report();
