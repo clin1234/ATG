@@ -1,3 +1,4 @@
 *.class
 *.code-workspace
 *.diff
+.idea/
