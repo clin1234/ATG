@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class FillInTheBlank extends Question {
     private final String[] correctAnswers;
-    private ArrayList<String> incorrectAnswers;
+    private int[] incorrectEntries;
 
     // Data Members
 
@@ -15,28 +16,37 @@ public class FillInTheBlank extends Question {
         int count = quest.length() - quest.replace("_", "").length();
         assert expectedAnsw.length == count;
         correctAnswers = Arrays.stream(expectedAnsw).map(String::toLowerCase).toArray(String[]::new);
-        //incorrectAnswers = new ArrayList<>();
+        incorrectEntries = new int[correctAnswers.length];
+        // -1 means the answer at is incorrect
+        Arrays.fill(incorrectEntries, -1);
     }
 
     public void checkAnswer(String p) {
-        var phrases = Arrays.stream(p.split(",")).map(String::toLowerCase).map(String::trim).toArray(String[]::new);
-        assert phrases.length == correctAnswers.length;
+        if (p.equals("")) {
+            setCorrect(false);
+            return;
+        }
+        var phrases = Arrays.stream(p.split(","))
+                .map(String::toLowerCase).map(String::trim).toArray(String[]::new);
 
         boolean correct = Arrays.equals(phrases, correctAnswers);
         setCorrect(correct);
         if (!correct) {
-            incorrectAnswers = new ArrayList<>(correctAnswers.length);
-            for (int i = 0; i < correctAnswers.length; i++)
-                if (!correctAnswers[i].equals(phrases[i]))
-                    incorrectAnswers.add(i, phrases[i]);
+            //int mismatch = Arrays.mismatch(correctAnswers, phrases);
+            for (int i = 0; i < phrases.length; i++)
+                if (correctAnswers[i].equals(phrases[i]))
+                    incorrectEntries[i] = i;
         }
     }
 
     @Override
     public String showForWrongQ() {
         StringBuilder tmp = new StringBuilder(30);
-        for (var p : incorrectAnswers.parallelStream().filter(Objects::nonNull).toList())
-            tmp.append("Entry ").append(incorrectAnswers.indexOf(p)).append(" should have ").append(p).append(", ");
+        for (int i = 0; i < correctAnswers.length; i++) {
+            if (incorrectEntries[i] == -1)
+                tmp.append("Entry %d should have %s,%n".formatted(i, correctAnswers[i]));
+            //tmp.append("Entry ").append(incorrectAnswers.indexOf(p)).append(" should have ").append(p).append(", ");
+        }
         return tmp.toString();
     }
 

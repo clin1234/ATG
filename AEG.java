@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -21,16 +22,19 @@ public class AEG {
      * e.takeExam(); e.gradeExam(); e.displayResult(); // Kludge return; } }
      */
 
-    public static void main(String[] args) throws IOException, NoSuchFileException {
+    public static void main(String[] args) throws IOException {
         // Insert name of file containing user answers here.
-        var inputFile = Path.of("actually_right1.txt");
-        assert !Files.notExists(inputFile) : inputFile + " does not exist.";
+        var inputFile = Path.of("actually_right.txt");
+        if (!Files.exists(inputFile)) throw new NoSuchFileException(inputFile + " does not exist");
 
         var contents = Files.readString(inputFile);
         String[] splitter = COMPILE.split(contents, 2);
         String name = splitter[0];
         splitter[1] = splitter[1].replace(System.lineSeparator(), "");
-        assert splitter[1].chars().filter(c -> c == ';').count() == 24;
+        if (splitter[1].chars().filter(c -> c == ';').count() != 24) {
+            System.err.println(inputFile + " must have exactly 24 ';' separating answers");
+            return;
+        }
         Exam e = new Exam(name, LocalDate.now().toString());
         e.takeExam(splitter[1].split(";"));
         e.gradeExam();

@@ -21,7 +21,8 @@ public class ShortAnswer extends Question {
     @Override
     public void checkAnswer(String input) {
         missingPhrases = new HashSet<>(expectedKeywords.size());
-        expectedKeywords.parallelStream().filter(p -> !input.contains(p)).peek(missingPhrases::add);
+        Stream<String> stringStream = expectedKeywords.parallelStream().filter(p -> !input.contains(p));
+        stringStream.forEach(missingPhrases::add);
 
         setCorrect(missingPhrases.isEmpty());
     }
