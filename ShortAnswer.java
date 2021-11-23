@@ -3,12 +3,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
-    private HashSet<String> missingPhrases;
     private final HashSet<String> expectedKeywords;
+    private HashSet<String> missingPhrases;
 
     /**
-     * 
-     * @param subject  Subject
+     * @param subject     Subject
      * @param theQuestion Question
      * @param keywords    Keywords expected in the user's answer for the user's
      *                    answer to be deemed correct

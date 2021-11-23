@@ -26,7 +26,7 @@ public class AEG {
         if (!Files.exists(inputFile)) throw new NoSuchFileException(inputFile + " does not exist");
 
         var contents = Files.readString(inputFile);
-        String[] splitter = COMPILE.split(contents, 2);
+        String[] splitter = AEG.COMPILE.split(contents, 2);
         String name = splitter[0];
         splitter[1] = splitter[1].replace(System.lineSeparator(), "");
         if (splitter[1].chars().filter(c -> c == ';').count() != 24) {
