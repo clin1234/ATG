@@ -18,7 +18,7 @@ class ExamTest {
 		Exam e = new Exam("Erin Mack", "2021-11-09");
 		final int expected = 25;
 		// Call to the method being tested
-		final int actual = e.getMAX_SCORE();
+		final int actual = Exam.getMAX_SCORE();
 		// Assertion
 		assertEquals(expected, actual);
 	}
@@ -29,7 +29,7 @@ class ExamTest {
 		Exam e = new Exam("Archie Hen", "2021-08-12");
 		final int expected = 1;
 		// Call to the method being tested
-		final int actual = e.getQUESTION_WEIGHT();
+		final int actual = Exam.getQUESTION_WEIGHT();
 		// Assertion
 		assertEquals(expected, actual);
 	}
@@ -110,7 +110,7 @@ class ExamTest {
 		// Setting up for testing
 		Exam e = new Exam("Charlie Lin", "2021-09-20");
 		// Call to the method being tested
-		String actual = e.testGetUserName();
+		String actual = e.getUserName();
 		// Assertion
 		assertEquals("Charlie Lin", actual);
 	}
@@ -120,7 +120,7 @@ class ExamTest {
 		// Setting up for testing
 		Exam e = new Exam("Matt Westphalen", "2021-11-17");
 		// Call to the method being tested
-		String actual = e.testGetTestDate();
+		String actual = e.getTestDate();
 		// Assertion
 		assertEquals("2021-11-17", actual);
 	}
