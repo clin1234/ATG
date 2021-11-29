@@ -1,3 +1,8 @@
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Container;
@@ -71,5 +76,15 @@ public class GUI {
     	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	window.pack();
     	window.setVisible(true);
+		displayGraph();
     }
+
+	public void displayGraph() {
+		var ds = new DefaultPieDataset<String>();
+		ds.setValue("Math", 4.0);
+		ds.setValue("Geopragy", 5.7);
+		var c = ChartFactory.createPieChart("Stats", ds, true, true, false);
+		var frame = new ChartFrame("Lol", c);
+		frame.setVisible(true);
+	}
 }

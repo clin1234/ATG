@@ -1,11 +1,9 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
  * Notes:
@@ -43,7 +41,7 @@ public class Exam {
         // Creating Math Subject Question Objects
         var Math_MCQuestion1 = new MultipleChoice(Subject.Math, "What is 2 + 2?", "4", "1", "2", "3", "4");
         var Math_MCQUestion2 = new MultipleChoice(Subject.Math, "What is 10 * 10?", "100", "0", "100", "1000", "010");
-        var Math_ToF = new TrueOrFalse(Subject.Math, "Math is a universal language.", "True");
+        var Math_ToF = new TrueOrFalse(Subject.Math, "Math is a universal language.", true);
         var Math_FiB = new FillInTheBlank(Subject.Math, "_____'s rule allows evaluating ____ of ____ forms",
                 "L'Hopital", "limits", "indeterminate");
         var Math_SA = new ShortAnswer(Subject.Math,
@@ -54,7 +52,7 @@ public class Exam {
                 "Martin Luther King Jr.", "Gandhi.", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks.");
         var History_MCQUestion2 = new MultipleChoice(Subject.History,
                 "In which year did the first man walk on the moon?", "1969", "1969", "1960", "1925", "1989");
-        var History_ToF = new TrueOrFalse(Subject.History, "California and Texas were once part of Mexico.", "True"
+        var History_ToF = new TrueOrFalse(Subject.History, "California and Texas were once part of Mexico.", true
         );
         var History_FiB = new FillInTheBlank(Subject.History,
                 "In the early 1990s, the two most common families of Unix systems were ___ and ___ ", "System V UNIX",
@@ -69,7 +67,7 @@ public class Exam {
         var Science_MCQuestion2 = new MultipleChoice(Subject.Science,
                 "AU is an abbreviation for which chemical element?", "Gold", "Silver", "Gold", "Bronze", "Mercury");
         var Science_ToF = new TrueOrFalse(Subject.Science, "The average human body has an average of 46 chromosomes.",
-                "True");
+                true);
         var Science_FiB = new FillInTheBlank(Subject.Science,
                 "The first 3 elements on the periodic table are _____, ____, and ____", "hydrogen", "helium",
                 "lithium");
@@ -81,7 +79,7 @@ public class Exam {
                 "10", "2");
         var Arts_MCQuestion2 = new MultipleChoice(Subject.Arts, "Nike was the goddess of what?", "Victory", "Love",
                 "War", "Victory", "Nature");
-        var Arts_ToF = new TrueOrFalse(Subject.Arts, "The Monalisa does not have eyebrows.", "True");
+        var Arts_ToF = new TrueOrFalse(Subject.Arts, "The Monalisa does not have eyebrows.", true);
         var Arts_FiB = new FillInTheBlank(Subject.Arts, "The three primary colors are ___, ____, and  ____", "red",
                 "blue", "yellow");
         var Arts_SA = new ShortAnswer(Subject.Arts, "In what battle and war was Picasso's \"Guernica\" set in?",
@@ -93,7 +91,7 @@ public class Exam {
         var Geography_MCQuestion2 = new MultipleChoice(Subject.Geography, "How many continents are there?", "7", "5",
                 "6", "7", "8");
         var Geography_ToF = new TrueOrFalse(Subject.Geography,
-                "India is the country with the highest population in the world.", "False");
+                "India is the country with the highest population in the world.", false);
         var Geography_FiB = new FillInTheBlank(Subject.Geography,
                 "The two most recently admitted states in the United States are _____ and _____", "Alaska", "Hawaii");
         var Geography_SA = new ShortAnswer(Subject.Geography,
@@ -233,4 +231,12 @@ public class Exam {
         Math, Science, History, Geography, Arts
     }
 
+    public final int has() {
+        // Only String.hashCode()...
+        var stream = Arrays.stream(questionBank).map(Question::toString);
+        /* and List.hashCode() have guaranteed hashing methods specified in the spec,
+        so this should return the same hashcode across Java versions */
+        var p = stream.toArray(String[]::new);
+        return Arrays.hashCode(p);
+    }
 }
