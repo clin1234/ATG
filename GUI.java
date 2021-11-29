@@ -43,12 +43,14 @@ public class GUI {
     			+ "Math, Art, Science, Geography), and in different types.<br>"
     			+ "Select the best suitable answer for each question and<br>"
     			+ "proceed to the next question. Your results will be saved<br>"
-    			+ "and displayed at the end. Good luck!<html>");
+    			+ "and displayed at the end. Good luck!</html>");
     	
     	JButton startButton = new JButton("Start Exam");
     	startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		// TODO: convert to either lambda or method reference
     	startButton.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
+    		@Override
+			public void actionPerformed(ActionEvent e) {
     			// Start Exam
     		}
     	});
@@ -69,10 +71,5 @@ public class GUI {
     	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	window.pack();
     	window.setVisible(true);
-    	
-    	
-
-        
-        
     }
 }
