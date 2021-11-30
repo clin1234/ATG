@@ -51,7 +51,7 @@ public class GUI2 {
             // Sanity checks
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
 
-            Question question = e.getQuestionBank()[i-1];
+            Question question = e.getQuestionBank()[i - 1];
             System.out.println(i + " " + question.getQuestion());
 
             // Hope assumption is true...
@@ -66,9 +66,16 @@ public class GUI2 {
                     question.checkAnswer(String.valueOf(isTrue));
                     System.out.println("checkbox");
                 } else if (component instanceof JComboBox cb) {
-                    var entry = Objects.requireNonNull(cb.getSelectedItem()).toString();
-                    System.out.println(entry);
-                    question.checkAnswer(entry);
+                    /* All because a stupid decision for MultipleChoice's checkAnswer's parameter
+                     * to be a string of the index of the choice + 1.
+                     * If anyone happens to find this codebase in the future...
+                     * well get ready to feel metaphorical rectal discomfort.*/
+                    var entryIdx = Integer.toString(
+                            Arrays.asList(((MultipleChoice) question)
+                                            .getResponseOptions())
+                                    .indexOf(Objects.requireNonNull(cb.getSelectedItem()).toString()) + 1);
+                    System.out.println(entryIdx);
+                    question.checkAnswer(entryIdx);
                     System.out.println("combobox");
                 } else if (component instanceof JTextArea ta) {
                     var entry = ta.getText();
