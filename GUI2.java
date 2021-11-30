@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 public class GUI2 {
-    JTabbedPane tabbedPane = new JTabbedPane();
+    final JTabbedPane tabbedPane = new JTabbedPane();
     Exam e;
 
     public void addComponentToPane(Container pane) {
@@ -31,7 +34,7 @@ public class GUI2 {
 
         pane.add(tabbedPane, BorderLayout.CENTER);
 
-        startButton.addActionListener(e -> {
+        startButton.addActionListener(event -> {
             if (nameBox.getText().isEmpty())
                 JOptionPane.showMessageDialog(startCard, "Enter a name");
             else addQs(nameBox.getText());
@@ -45,6 +48,7 @@ public class GUI2 {
     void processAnswers() {
         // Skip tabs containing instructional and submission messages
         for (int i = 1; i < tabbedPane.getTabCount()-1; i++) {
+            Question question = e.getQuestionBank()[i];
             // Hope assumption is true...
             var panel = (JPanel) tabbedPane.getComponentAt(i);
             for (var component : panel.getComponents()) {
@@ -52,14 +56,23 @@ public class GUI2 {
                 if (component instanceof JLabel) continue;
                 if (component instanceof JCheckBox c) {
                     var isTrue = c.isSelected();
-
+                    question.checkAnswer(Boolean.toString(isTrue));
                 }
                 else if (component instanceof JComboBox cb) {
-                    var entry = cb.getSelectedItem().toString();
+                    var entry = Objects.requireNonNull(cb.getSelectedItem()).toString();
+                    question.checkAnswer(entry);
                 }
                 else if (component instanceof JTextField tf) {
                     var entry = tf.getText();
-
+                    question.checkAnswer(entry);
+                }
+                // JPanel containing JTextEntries
+                else {
+                    // Ugly casts necessary
+                    var boxes = ((JTextField[]) ((JPanel) component).getComponents());
+                    var delineatedString = Arrays.stream(boxes).map(JTextField::getText)
+                            .collect(Collectors.joining(","));
+                    question.checkAnswer(delineatedString);
                 }
             }
         }
@@ -79,9 +92,11 @@ public class GUI2 {
             else if (question instanceof  TrueOrFalse)
                 tmpPanel.add(new JCheckBox("True?"));
             else if (question instanceof  FillInTheBlank q) {
+                var groupOfEntries = new JPanel(new GridBagLayout());
                 var size = q.numberOfEntries;
                 for (int j = 0 ; j < size; j++)
-                    tmpPanel.add(new JTextField(10));
+                    groupOfEntries.add(new JTextField(10));
+                tmpPanel.add(groupOfEntries, new GridBagConstraints());
             }
             else tmpPanel.add(new JTextArea());
             tabbedPane.addTab(Integer.toString(i), tmpPanel);
@@ -90,7 +105,7 @@ public class GUI2 {
         var submissionCard = new JPanel();
         submissionCard.add(new JLabel("Are you sure you want to submit?"));
         JButton submit = new JButton("Submit");
-        submit.addActionListener(e -> processAnswers());
+        submit.addActionListener(event -> processAnswers());
         submissionCard.add(submit);
         tabbedPane.addTab("Submission", submissionCard);
     }
