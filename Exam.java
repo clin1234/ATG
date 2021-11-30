@@ -31,6 +31,8 @@ public class Exam {
     String userAnswer;
     private EnumMap<Subject, Integer> subjectScores = null;
 
+    // CONSTRUCTOR
+    
     public Exam(String theUser, String theTestDate) {
 
         // Setting exam taker's name and date test was taken
@@ -130,13 +132,11 @@ public class Exam {
     // Maybe needed for todo below?
     // private record Pair<F,S>(F first, S second){}
 
-    // Constructor
+    // METHODS
 
     public static int getMAX_SCORE() {
         return MAX_SCORE;
     }
-
-    // Methods
 
     public static int getQUESTION_WEIGHT() {
         return QUESTION_WEIGHT;
