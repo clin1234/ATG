@@ -13,7 +13,7 @@ public class AEG {
 
     public static void main(String[] args) throws IOException {
         // Insert name of file containing user answers here.
-        var inputFile = Path.of("actually_right.txt");
+        var inputFile = Path.of("somewhat_right.txt");
         if (!Files.exists(inputFile)) throw new NoSuchFileException(inputFile + " does not exist");
 
         var contents = Files.readString(inputFile);
