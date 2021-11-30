@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
  * Notes:
@@ -168,10 +169,13 @@ public class Exam {
          * correctly per subject, and store in EnumMap, with keys being the subjects and
          * values being their per subject score
          */
-        subjectScores = Arrays.stream(questionBank).filter(Question::isCorrect)
+        Stream<Question> stream = Arrays.stream(questionBank);
+        Stream<Question> questionStream = stream.filter(Question::isCorrect);
+        EnumMap<Subject, Integer> collect = questionStream
                 .collect(Collectors.groupingBy(Question::getSubject,
                         () -> new EnumMap<>(Subject.class),
                         Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
+        subjectScores = collect;
     }
 
     // Print user's score on the test

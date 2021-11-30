@@ -1,13 +1,25 @@
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.swing.*;
 
+import static java.util.stream.Collectors.joining;
+
 public class GUI2 {
     final JTabbedPane tabbedPane = new JTabbedPane();
-    Exam e;
+    static Exam e;
 
     public void addComponentToPane(Container pane) {
 
@@ -91,7 +103,7 @@ public class GUI2 {
                     var delineatedString = Arrays.stream(boxes)
                             .filter(c -> c instanceof JTextField)
                             .map(c -> ((JTextField) c).getText())
-                            .collect(Collectors.joining(","));
+                            .collect(joining(","));
                     System.out.println(delineatedString);
                     question.checkAnswer(delineatedString);
                     System.out.println("panel with text entries");
@@ -126,7 +138,15 @@ public class GUI2 {
         var submissionCard = new JPanel();
         submissionCard.add(new JLabel("Are you sure you want to submit?"));
         JButton submit = new JButton("Submit");
-        submit.addActionListener(event -> processAnswers());
+        submit.addActionListener(event -> {
+            processAnswers();
+            try {
+                e.writeOut();
+                displayGraph();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         submissionCard.add(submit);
         tabbedPane.addTab("Submission", submissionCard);
     }
@@ -146,7 +166,42 @@ public class GUI2 {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void displayGraph() throws IOException {
+        var db = Files.readAllLines(Path.of("db.csv"));
+        if (db.isEmpty())
+            System.err.println("Try taking the test, buddy. Nothing to pry open with your wily eyes, eh?");
+        else {
+            final var avrgScorPerSubj = new EnumMap<>(Map.of(Subject.Math, 0.0, Subject.Arts, 0.0,
+                    Subject.Geography, 0.0, Subject.History, 0.0, Subject.Science, 0.0));
+            for (var l : db) {
+                // Scores in order: Math, Science, History, Geography, Arts (each out of 5)
+                var tmpStream = Arrays.stream(l.split(",", 3)[2].split(","));
+                var doubleStream = tmpStream.mapToDouble(Double::parseDouble);
+                final var userScores = doubleStream.toArray();
+                avrgScorPerSubj.put(Subject.Math, avrgScorPerSubj.get(Subject.Math) + userScores[0]);
+                avrgScorPerSubj.put(Subject.Arts, avrgScorPerSubj.get(Subject.Arts) + userScores[4]);
+                avrgScorPerSubj.put(Subject.Geography, avrgScorPerSubj.get(Subject.Geography) + userScores[3]);
+                avrgScorPerSubj.put(Subject.History, avrgScorPerSubj.get(Subject.History) + userScores[2]);
+                avrgScorPerSubj.put(Subject.Science, avrgScorPerSubj.get(Subject.Science) + userScores[1]);
+            }
+            for (final var entry : avrgScorPerSubj.entrySet()) {
+                double avg = entry.getValue() / db.size();
+                avrgScorPerSubj.put(entry.getKey(), avg);
+            }
+
+            var ds = new DefaultCategoryDataset();
+            for (var kv : e.getSubjectScores().entrySet())
+                ds.addValue(kv.getValue(), kv.getKey(), e.getUserName());
+            for (var kv : avrgScorPerSubj.entrySet())
+                ds.addValue(kv.getValue(), kv.getKey(), "All test takers");
+            var c = ChartFactory.createBarChart("Stats", "Score", "", ds);
+            var frame = new ChartFrame("Past Test Statistics", c);
+            frame.setSize(500, 400);
+            frame.setVisible(true);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
         SwingUtilities.invokeLater(GUI2::createAndShowGUI);
     }
 }
