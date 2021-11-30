@@ -15,7 +15,7 @@ public class MultipleChoice extends Question {
      * @param theCorrectAnswer Correct choice
      * @param choices          Response options
      */
-    public MultipleChoice(Exam.Subject theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
+    public MultipleChoice(Subject theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 
         // Calling super-class' constructor
         super(theSubject, theQuestion);
@@ -28,11 +28,10 @@ public class MultipleChoice extends Question {
     // Methods
 
     // Printing all response options
-    @Override
     public void printOptions() {
         // For example purposes I'll be using System.out.println()
         for (int i = 0; i < responseOptions.length; i++)
-            System.out.println("   " + (i + 1) + ". " + responseOptions[i]);
+            System.out.printf("   %d. %s%n", i + 1, responseOptions[i]);
     }
 
     public String[] getResponseOptions() {
@@ -51,5 +50,10 @@ public class MultipleChoice extends Question {
     @Override
     public String showForWrongQ() {
         return (Arrays.asList(responseOptions).indexOf(correctAnswer) + 1) + ". " + correctAnswer;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(" ",  Arrays.toString(responseOptions), correctAnswer, super.toString());
     }
 }
