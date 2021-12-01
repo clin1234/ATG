@@ -171,11 +171,10 @@ public class Exam {
          */
         Stream<Question> stream = Arrays.stream(questionBank);
         Stream<Question> questionStream = stream.filter(Question::isCorrect);
-        EnumMap<Subject, Integer> collect = questionStream
+        subjectScores = questionStream
                 .collect(Collectors.groupingBy(Question::getSubject,
                         () -> new EnumMap<>(Subject.class),
                         Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
-        subjectScores = collect;
     }
 
     // Print user's score on the test
@@ -197,7 +196,9 @@ public class Exam {
     }
 
     public void writeOut() throws IOException {
-        var p = subjectScores.values().parallelStream().map(String::valueOf).collect(Collectors.joining(","));
+        var p = subjectScores.values().parallelStream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
         try (var pw = new PrintWriter(new FileWriter("db.csv", true))) {
             pw.println("%s,%s,%s".formatted(userName, testDate, p));
         }
