@@ -187,11 +187,12 @@ public class Exam {
                 if (!q.isCorrect()) {
                     System.out.println((i + 1) + ") " + q.getQuestion());
                     System.out.println("Your answer: " + ans[i]);
-                    System.out.println("Correct answer: " + q.showForWrongQ());
+                    System.out.println(q.showForWrongQ());
+                    System.out.println();
                 }
             }
         }
-        System.out.println();
+        //System.out.println();
         System.out.println(printExamResult());
     }
 

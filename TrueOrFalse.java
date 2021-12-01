@@ -23,7 +23,7 @@ public class TrueOrFalse extends Question {
 
     @Override
     public String showForWrongQ() {
-        return Boolean.toString(trueRight);
+        return "Your answer should be "+ trueRight;
     }
 
     @Override

@@ -1,18 +1,12 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
 
 import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 import javax.swing.*;
 
 import static java.util.stream.Collectors.joining;
@@ -21,7 +15,7 @@ public class GUI2 {
     final JTabbedPane tabbedPane = new JTabbedPane();
     static Exam e;
 
-    public void addComponentToPane(Container pane) {
+    public final void addComponentToPane(Container pane) {
 
         var startCard = new JPanel();
         var instruction = new JLabel("""
@@ -59,24 +53,24 @@ public class GUI2 {
      */
     void processAnswers() {
         // Skip tabs containing instructional and submission messages
-        for (int i = 1; i < tabbedPane.getTabCount() - 1; i++) {
+        for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
             // Sanity checks
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
 
             Question question = e.getQuestionBank()[i - 1];
-            System.out.println(i + " " + question.getQuestion());
+            //System.out.println(i + " " + question.getQuestion());
 
             // Hope assumption is true...
             var panel = (JPanel) tabbedPane.getComponentAt(i);
-            System.out.print("Answer: ");
+            //System.out.print("Answer: ");
             for (var component : panel.getComponents()) {
                 // Skip question text
                 if (component instanceof JLabel) continue;
                 if (component instanceof JCheckBox c) {
                     var isTrue = c.isSelected();
-                    System.out.println(isTrue);
+                    //System.out.println(isTrue);
                     question.checkAnswer(String.valueOf(isTrue));
-                    System.out.println("checkbox");
+                    //System.out.println("checkbox");
                 } else if (component instanceof JComboBox cb) {
                     /* All because a stupid decision for MultipleChoice's checkAnswer's parameter
                      * to be a string of the index of the choice + 1.
@@ -86,14 +80,14 @@ public class GUI2 {
                             Arrays.asList(((MultipleChoice) question)
                                             .getResponseOptions())
                                     .indexOf(Objects.requireNonNull(cb.getSelectedItem()).toString()) + 1);
-                    System.out.println(entryIdx);
+                    //System.out.println(entryIdx);
                     question.checkAnswer(entryIdx);
-                    System.out.println("combobox");
+                    //System.out.println("combobox");
                 } else if (component instanceof JTextArea ta) {
                     var entry = ta.getText();
-                    System.out.println(entry);
+                    //System.out.println(entry);
                     question.checkAnswer(entry);
-                    System.out.println("textarea");
+                    //System.out.println("textarea");
                 }
                 // JPanel containing JTextEntries
                 else {
@@ -104,13 +98,14 @@ public class GUI2 {
                             .filter(c -> c instanceof JTextField)
                             .map(c -> ((JTextField) c).getText())
                             .collect(joining(","));
-                    System.out.println(delineatedString);
+                    //System.out.println(delineatedString);
                     question.checkAnswer(delineatedString);
-                    System.out.println("panel with text entries");
+                    //System.out.println("panel with text entries");
                 }
             }
         }
         e.gradeExam();
+        //tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1).setVisible(false);
     }
 
     void addQs(String name) {
@@ -166,6 +161,54 @@ public class GUI2 {
         frame.setVisible(true);
     }
 
+    public void showForWrongQs() {
+        for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
+            // Sanity checks
+            if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
+
+            Question question = e.getQuestionBank()[i - 1];
+            //System.out.println(i + " " + question.getQuestion());
+
+            // Hope assumption is true...
+            var panel = (JPanel) tabbedPane.getComponentAt(i);
+            //System.out.print("Answer: ");
+            for (var component : panel.getComponents()) {
+                // Skip question text
+                if (component instanceof JLabel) continue;
+                if ((component instanceof JCheckBox c) && !question.isCorrect()) {
+                    c.setForeground(Color.RED);
+                    //System.out.println("checkbox");
+                } else if ((component instanceof JComboBox cb) && question instanceof MultipleChoice m
+                && !m.isCorrect()) {
+                    var p = new JLabel(m.getCorrectAnswer() + ", not "
+                            + cb.getSelectedItem().toString());
+                    panel.add(p);
+                } else if ((component instanceof JTextArea ta) &&
+                        (question instanceof ShortAnswer sa) &&
+                        !sa.isCorrect()) {
+                    var missing = sa.getMissingPhrases();
+                    ta.setText("Your response was missing: "+ missing.toString());
+                }
+                // JPanel containing JTextEntries
+                else if ((question instanceof FillInTheBlank f) && !f.isCorrect()){
+                    // Ugly casts necessary
+                    JPanel panelInTab = (JPanel) component;
+                    var boxes = Arrays.stream(panelInTab.getComponents())
+                            .filter(e -> e instanceof JTextField)
+                            .toArray(JTextField[]::new);
+                    for (int j = 0; j < boxes.length; j++) {
+                        if (!boxes[j].getText().equals(f.getCorrectAnswers()[i])) {
+                            var entry = (JTextField) panelInTab.getComponent(i);
+                            entry.setForeground(Color.RED);
+                            entry.setText(f.getCorrectAnswers()[i]);
+                        }
+                    }
+                    //System.out.println("panel with text entries");
+                }
+            }
+        }
+    }
+
     public static void displayGraph() throws IOException {
         var db = Files.readAllLines(Path.of("db.csv"));
         if (db.isEmpty())
@@ -173,9 +216,9 @@ public class GUI2 {
         else {
             final var avrgScorPerSubj = new EnumMap<>(Map.of(Subject.Math, 0.0, Subject.Arts, 0.0,
                     Subject.Geography, 0.0, Subject.History, 0.0, Subject.Science, 0.0));
-            for (var l : db) {
+            for (var line : db) {
                 // Scores in order: Math, Science, History, Geography, Arts (each out of 5)
-                var tmpStream = Arrays.stream(l.split(",", 3)[2].split(","));
+                var tmpStream = Arrays.stream(line.split(",", 3)[2].split(","));
                 var doubleStream = tmpStream.mapToDouble(Double::parseDouble);
                 final var userScores = doubleStream.toArray();
                 avrgScorPerSubj.put(Subject.Math, avrgScorPerSubj.get(Subject.Math) + userScores[0]);
@@ -193,15 +236,16 @@ public class GUI2 {
             for (var kv : e.getSubjectScores().entrySet())
                 ds.addValue(kv.getValue(), kv.getKey(), e.getUserName());
             for (var kv : avrgScorPerSubj.entrySet())
-                ds.addValue(kv.getValue(), kv.getKey(), "All test takers");
+                ds.addValue(kv.getValue(), kv.getKey(), "Averages of all test takers");
             var c = ChartFactory.createBarChart("Stats", "Score", "", ds);
             var frame = new ChartFrame("Past Test Statistics", c);
             frame.setSize(500, 400);
             frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(GUI2::createAndShowGUI);
     }
 }

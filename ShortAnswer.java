@@ -4,6 +4,11 @@ import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
     private final HashSet<String> expectedKeywords;
+
+    public final HashSet<String> getMissingPhrases() {
+        return missingPhrases;
+    }
+
     private HashSet<String> missingPhrases;
 
     /**

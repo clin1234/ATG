@@ -1,6 +1,10 @@
 import java.util.Arrays;
 
 public class FillInTheBlank extends Question {
+    public String[] getCorrectAnswers() {
+        return correctAnswers;
+    }
+
     private final String[] correctAnswers;
     private final int[] incorrectEntries;
     final int numberOfEntries;

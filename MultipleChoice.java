@@ -5,6 +5,11 @@ public class MultipleChoice extends Question {
     // Data Members
 
     private String[] responseOptions;
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
     private String correctAnswer;
 
     // Constructor
@@ -49,7 +54,13 @@ public class MultipleChoice extends Question {
 
     @Override
     public String showForWrongQ() {
-        return (Arrays.asList(responseOptions).indexOf(correctAnswer) + 1) + ". " + correctAnswer;
+        var sb = new StringBuilder(20);
+        for (int i = 0; i < responseOptions.length; i++) {
+            String tmp = "   %d. %s".formatted(i + 1, responseOptions[i]);
+            if (correctAnswer.equals(responseOptions[i])) tmp += " <-- Correct answer";
+            sb.append(tmp + System.lineSeparator());
+        }
+        return sb.toString();
     }
 
     @Override
