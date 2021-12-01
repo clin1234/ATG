@@ -1,12 +1,12 @@
 public abstract class Question {
 
-    // Data Members
+    // DATA MEMBERS
 
     private Exam.Subject subject;
     private String question;
     private boolean correct;
 
-    // Constructor
+    // CONSTRUCTOR
     // Used only to initialize variables for the subclasses
 
     public Question(Exam.Subject theSubject, String theQuestion) {
@@ -14,7 +14,7 @@ public abstract class Question {
         question = theQuestion;
     }
 
-    // Methods
+    // METHODS
 
     public void printOptions() {
     }
@@ -45,5 +45,15 @@ public abstract class Question {
 
     public void setCorrect(boolean b) {
         correct = b;
+    }
+
+    // Used for unit tests
+    public boolean getCorrect() {
+    	return correct;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(" ", subject.toString(), question);
     }
 }

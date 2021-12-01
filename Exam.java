@@ -61,7 +61,7 @@ public class Exam {
                 "BSD");
         var History_SA = new ShortAnswer(Subject.History,
                 "In 1955, when the Warsaw Pact was founded, who were its founding members?", "Albania", "East Germany",
-                "Czechoslovakia", "Poland", "Hungary", "Albania", "Bulgaria", "Romania", "Soviet Union");
+                "Czechoslovakia", "Poland", "Hungary", "Bulgaria", "Romania", "Soviet Union");
 
         // Creating Science Subject Question Objects
         var Science_MCQuestion1 = new MultipleChoice(Subject.Science,
