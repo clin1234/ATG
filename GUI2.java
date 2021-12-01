@@ -20,19 +20,21 @@ public class GUI2 {
         var startCard = new JPanel();
         var instruction = new JLabel("""
                 <html>
-                AEG for short, the Automated Exam Generator simulates a real online exam of 25 questions.<br>
-                You will be presented with questions from different subjects<br>
-                (History, Math, Art, Science, Geography), and in different types.<br>
-                Select the best suitable answer for each question and proceed to the next question.<br>
-                Your results will be saved and displayed at the end. Good luck!<br>
+                AEG for short, the <b>Automated Exam Generator</b> simulates a real online exam of <b>25 questions</b>.<br>
+                You will be presented with questions from different subjects (<b>History, Math, Art, Science,<br>
+                Geography</b>), and in different types. Select the best suitable answer for each question and<br>
+                proceed to the next question. Your results will be saved and displayed at the end. <b>Good luck!</b>
                 </html>
                 """);
-        var startButton = new JButton("Start");
+
+        var startButton = new JButton("Begin Exam");
         var nameBox = new JTextField(12);
         var label = new JLabel("Name:");
-
+        
+        startCard.add(Box.createVerticalStrut(100));
         startCard.add(instruction);
-        startCard.add(label, BorderLayout.SOUTH);
+        startCard.add(Box.createHorizontalStrut(1800));
+        startCard.add(label, BorderLayout.SOUTH);    
         startCard.add(nameBox, BorderLayout.SOUTH);
         startCard.add(startButton, BorderLayout.SOUTH);
 
@@ -42,7 +44,7 @@ public class GUI2 {
 
         startButton.addActionListener(event -> {
             if (nameBox.getText().isEmpty())
-                JOptionPane.showMessageDialog(startCard, "Enter a name");
+                JOptionPane.showMessageDialog(startCard, "Please enter a name to proceed with test.");
             else addQs(nameBox.getText());
         });
     }
@@ -113,21 +115,47 @@ public class GUI2 {
         var p = e.getQuestionBank();
         for (int i = 1; i <= p.length; i++) {
             JPanel tmpPanel = new JPanel();
+            JButton nextQuestion = new JButton("Next");
+            JButton previousQuestion = new JButton("Previous");
+              
             var question = p[i - 1];
-            tmpPanel.add(new JLabel(question.getQuestion()));
-            //JComponent answerComp;
+            tmpPanel.add(new JLabel("Q: " + question.getQuestion()));
+            
             if (question instanceof MultipleChoice q)
                 tmpPanel.add(new JComboBox<>(q.getResponseOptions()));
-            else if (question instanceof TrueOrFalse)
-                tmpPanel.add(new JCheckBox("True?"));
-            else if (question instanceof FillInTheBlank q) {
+            else if (question instanceof TrueOrFalse) {
+            	var trueOption = new JRadioButton("True");
+            	var falseOption = new JRadioButton("False");
+            	var group = new ButtonGroup();
+            	group.add(trueOption);
+            	group.add(falseOption);
+                tmpPanel.add(trueOption);
+                tmpPanel.add(falseOption);
+            } else if (question instanceof FillInTheBlank q) {
                 var groupOfEntries = new JPanel(new GridBagLayout());
                 var size = q.numberOfEntries;
                 for (int j = 0; j < size; j++)
                     groupOfEntries.add(new JTextField(10));
                 tmpPanel.add(groupOfEntries, new GridBagConstraints());
             } else if (question instanceof ShortAnswer) tmpPanel.add(new JTextArea(2, 10));
+            
             tabbedPane.addTab(Integer.toString(i), tmpPanel);
+            tabbedPane.setSelectedIndex(1);
+            tabbedPane.setEnabledAt(0, false);
+            
+            previousQuestion.addActionListener(event -> {
+            	if (tabbedPane.getSelectedIndex() > 1)
+            		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
+            });
+            
+            nextQuestion.addActionListener(event -> {
+            	tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+            });
+            
+            tmpPanel.add(Box.createHorizontalStrut(800));
+            tmpPanel.add(previousQuestion);
+            tmpPanel.add(nextQuestion);
+            
         }
 
         var submissionCard = new JPanel();
@@ -137,7 +165,7 @@ public class GUI2 {
             processAnswers();
             try {
                 e.writeOut();
-                displayGraph();
+                //displayGraph();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -148,7 +176,8 @@ public class GUI2 {
 
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("AEG");
+        JFrame frame = new JFrame("Automated Exam Generator");
+        frame.setMinimumSize(new Dimension(700,400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
@@ -157,7 +186,8 @@ public class GUI2 {
 
         //Display the window.
         frame.pack();
-        frame.setSize(550, 200);
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
