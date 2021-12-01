@@ -16,7 +16,7 @@ public class FillInTheBlank extends Question {
     public FillInTheBlank(Subject subj, String quest, String... expectedAnsw) {
         super(subj, quest);
         int count = quest.length() - quest.replace("_", "").length();
-        assert expectedAnsw.length == count;
+        //assert expectedAnsw.length == count;
         numberOfEntries = expectedAnsw.length;
         correctAnswers = Arrays.stream(expectedAnsw).map(String::toLowerCase).toArray(String[]::new);
         incorrectEntries = new int[correctAnswers.length];

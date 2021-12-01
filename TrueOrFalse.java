@@ -2,6 +2,10 @@ public class TrueOrFalse extends Question {
 
     // Data Members
 
+    public boolean isTrueRight() {
+        return trueRight;
+    }
+
     private boolean trueRight;
 
     /**

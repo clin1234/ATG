@@ -36,7 +36,7 @@ public class GUI2 {
         var startButton = new JButton("Begin Exam");
         var nameBox = new JTextField(12);
         var label = new JLabel("Name:");
-        
+
         startCard.add(Box.createVerticalStrut(100));
         startCard.add(instruction);
         startCard.add(Box.createHorizontalStrut(1800));
@@ -72,8 +72,8 @@ public class GUI2 {
             var panel = (JPanel) tabbedPane.getComponentAt(i);
             //System.out.print("Answer: ");
             for (var component : panel.getComponents()) {
-                // Skip question text
-                if (component instanceof JLabel) continue;
+                // Skip question text and next and previous buttons
+                if ((component instanceof JLabel) || (component instanceof JButton)) continue;
                 if (component instanceof JCheckBox c) {
                     var isTrue = c.isSelected();
                     //System.out.println(isTrue);
@@ -123,20 +123,23 @@ public class GUI2 {
             JPanel tmpPanel = new JPanel();
             JButton nextQuestion = new JButton("Next");
             JButton previousQuestion = new JButton("Previous");
-              
+
             var question = p[i - 1];
             tmpPanel.add(new JLabel("Q: " + question.getQuestion()));
-            
+
             if (question instanceof MultipleChoice q)
                 tmpPanel.add(new JComboBox<>(q.getResponseOptions()));
             else if (question instanceof TrueOrFalse) {
-            	var trueOption = new JRadioButton("True");
-            	var falseOption = new JRadioButton("False");
-            	var group = new ButtonGroup();
-            	group.add(trueOption);
-            	group.add(falseOption);
+                tmpPanel.add(new JCheckBox("Is the statement true?"));
+                /*
+                var trueOption = new JRadioButton("True");
+                var falseOption = new JRadioButton("False");
+                var group = new ButtonGroup();
+                group.add(trueOption);
+                group.add(falseOption);
                 tmpPanel.add(trueOption);
                 tmpPanel.add(falseOption);
+                */
             } else if (question instanceof FillInTheBlank q) {
                 var groupOfEntries = new JPanel(new GridBagLayout());
                 var size = q.numberOfEntries;
@@ -144,24 +147,24 @@ public class GUI2 {
                     groupOfEntries.add(new JTextField(10));
                 tmpPanel.add(groupOfEntries, new GridBagConstraints());
             } else if (question instanceof ShortAnswer) tmpPanel.add(new JTextArea(2, 10));
-            
+
             tabbedPane.addTab(Integer.toString(i), tmpPanel);
             tabbedPane.setSelectedIndex(1);
             tabbedPane.setEnabledAt(0, false);
-            
+
             previousQuestion.addActionListener(event -> {
-            	if (tabbedPane.getSelectedIndex() > 1)
-            		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
+                if (tabbedPane.getSelectedIndex() > 1)
+                    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
             });
-            
+
             nextQuestion.addActionListener(event -> {
-            	tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+                tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
             });
-            
-            tmpPanel.add(Box.createHorizontalStrut(800));
+
+            //tmpPanel.add(Box.createHorizontalStrut(800));
             tmpPanel.add(previousQuestion);
             tmpPanel.add(nextQuestion);
-            
+
         }
 
         var submissionCard = new JPanel();
@@ -184,7 +187,7 @@ public class GUI2 {
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Automated Exam Generator");
-        frame.setMinimumSize(new Dimension(700,400));
+        frame.setMinimumSize(new Dimension(700, 400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
@@ -212,7 +215,8 @@ public class GUI2 {
             for (var component : panel.getComponents()) {
                 // Skip question text
                 if (component instanceof JLabel) continue;
-                if ((component instanceof JCheckBox c) && !question.isCorrect()) {
+                boolean isSet = false;
+                if ((component instanceof JCheckBox c) && (question instanceof TrueOrFalse t) && !t.isCorrect()) {
                     c.setForeground(Color.RED);
                     //System.out.println("checkbox");
                 } else if ((component instanceof JComboBox cb) && (question instanceof MultipleChoice m)
@@ -229,17 +233,18 @@ public class GUI2 {
                 // JPanel containing JTextEntries
                 else if ((question instanceof FillInTheBlank f) && !f.isCorrect()) {
                     // Ugly casts necessary
-                    if (!(component instanceof JPanel panelInTab)) throw new AssertionError();
-                    var boxes = Arrays.stream(panelInTab.getComponents())
-                            .filter(element -> element instanceof JTextField)
-                            .toArray(JTextField[]::new);
-                    for (int j = 0; j < boxes.length; j++)
-                        if (!boxes[j].getText().equals(f.getCorrectAnswers()[j])) {
-                            var entry = (JTextField) panelInTab.getComponent(j);
-                            entry.setForeground(Color.RED);
-                            entry.setText(f.getCorrectAnswers()[j]);
-                        }
-                    //System.out.println("panel with text entries");
+                    if (component instanceof JPanel panelInTab) {
+                        var boxes = Arrays.stream(panelInTab.getComponents())
+                                .filter(element -> element instanceof JTextField)
+                                .toArray(JTextField[]::new);
+                        for (int j = 0; j < boxes.length; j++)
+                            if (!boxes[j].getText().equals(f.getCorrectAnswers()[j])) {
+                                var entry = (JTextField) panelInTab.getComponent(j);
+                                entry.setForeground(Color.RED);
+                                entry.setText(f.getCorrectAnswers()[j]);
+                            }
+                        //System.out.println("panel with text entries");
+                    }
                 }
             }
         }
@@ -272,12 +277,12 @@ public class GUI2 {
             for (var kv : e.getSubjectScores().entrySet())
                 ds.addValue(kv.getValue(), kv.getKey(), e.getUserName());
             ds.addValue(e.getSubjectScores().values().stream().mapToInt(e -> e).sum(),
-                    "uniq",
+                    "Total",
                     "Total score of " + e.getUserName());
             for (var kv : avrgScorPerSubj.entrySet())
                 ds.addValue(kv.getValue(), kv.getKey(), "Averages of all test takers");
             ds.addValue(avrgScorPerSubj.values().stream().mapToDouble(e -> e).sum(),
-                    "uniq",
+                    "Total",
                     "Average score of this test");
 
             var c = ChartFactory.createStackedBarChart("Stats", "Score", "", ds);
