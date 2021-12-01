@@ -4,6 +4,11 @@ import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
     private final HashSet<String> expectedKeywords;
+
+    public final HashSet<String> getMissingPhrases() {
+        return missingPhrases;
+    }
+
     private HashSet<String> missingPhrases;
 
     /**
@@ -12,7 +17,7 @@ public class ShortAnswer extends Question {
      * @param keywords    Keywords expected in the user's answer for the user's
      *                    answer to be deemed correct
      */
-    public ShortAnswer(Exam.Subject subject, String theQuestion, String... keywords) {
+    public ShortAnswer(Subject subject, String theQuestion, String... keywords) {
         super(subject, theQuestion);
         expectedKeywords = Stream.of(keywords).map(String::trim).collect(Collectors.toCollection(HashSet::new));
     }
@@ -29,5 +34,11 @@ public class ShortAnswer extends Question {
     @Override
     public String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
+    }
+
+    @Override
+    public String toString() {
+        return String.join(" ",
+                expectedKeywords.toString(), super.toString());
     }
 }

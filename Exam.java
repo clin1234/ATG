@@ -18,18 +18,25 @@ import java.util.stream.Stream;
 public class Exam {
 
     // Data Members
-
-    public final static EnumMap<Subject, String> subjectNames = new EnumMap<>(Map.of(Subject.Math, "Math", Subject.Arts,
-            "Arts", Subject.Geography, "Geography", Subject.History, "History", Subject.Science, "Science"));
     // private int userScore = 0;
-    private final static int MAX_SCORE = 25;
-    private final static int QUESTION_WEIGHT = 1;
+    private static final int MAX_SCORE = 25;
+    private static final int QUESTION_WEIGHT = 1;
     private final String userName;
     private final String testDate;
+
+    public Question[] getQuestionBank() {
+        return questionBank;
+    }
+
     private final Question[] questionBank = new Question[25];
     // Temporary to hold user's answer
     String userAnswer;
-    private EnumMap<Subject, Integer> subjectScores = null;
+
+    public EnumMap<Subject, Integer> getSubjectScores() {
+        return subjectScores;
+    }
+
+    private EnumMap<Subject, Integer> subjectScores;
 
     // CONSTRUCTOR
     
@@ -127,12 +134,6 @@ public class Exam {
         questionBank[23] = Geography_FiB;
         questionBank[24] = Geography_SA;
     }
-    // private final boolean[] correct = new boolean[25];
-
-    // Maybe needed for todo below?
-    // private record Pair<F,S>(F first, S second){}
-
-    // METHODS
 
     public static int getMAX_SCORE() {
         return MAX_SCORE;
@@ -164,20 +165,18 @@ public class Exam {
     }
 
     // Function to grade the exam
-    public void gradeExam() {
+    public final void gradeExam() {
         /*
          * Keep only correctly-answered questions, count number of questions answered
          * correctly per subject, and store in EnumMap, with keys being the subjects and
          * values being their per subject score
          */
-        subjectScores = Arrays.stream(questionBank).filter(Question::isCorrect)
-                .collect(Collectors.groupingBy(Question::getSubject, () -> new EnumMap<>(Subject.class),
+        Stream<Question> stream = Arrays.stream(questionBank);
+        Stream<Question> questionStream = stream.filter(Question::isCorrect);
+        subjectScores = questionStream
+                .collect(Collectors.groupingBy(Question::getSubject,
+                        () -> new EnumMap<>(Subject.class),
                         Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
-
-        // The power of Streams...........
-        // var correct =
-        // List.of(questionBank).parallelStream().filter(Question::isCorrect).count();
-        // userScore += QUESTION_WEIGHT * correct;
     }
 
     // Print user's score on the test
@@ -189,16 +188,19 @@ public class Exam {
                 if (!q.isCorrect()) {
                     System.out.println((i + 1) + ") " + q.getQuestion());
                     System.out.println("Your answer: " + ans[i]);
-                    System.out.println("Correct answer: " + q.showForWrongQ());
+                    System.out.println(q.showForWrongQ());
+                    System.out.println();
                 }
             }
         }
-        System.out.println();
+        //System.out.println();
         System.out.println(printExamResult());
     }
 
     public void writeOut() throws IOException {
-        var p = subjectScores.values().parallelStream().map(String::valueOf).collect(Collectors.joining(","));
+        var p = subjectScores.values().parallelStream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
         try (var pw = new PrintWriter(new FileWriter("db.csv", true))) {
             pw.println("%s,%s,%s".formatted(userName, testDate, p));
         }
@@ -207,7 +209,7 @@ public class Exam {
     public String printExamResult() {
         var sb = new StringBuilder(30);
         for (var s : Subject.values())
-            sb.append("%s: %d / 5%n".formatted(subjectNames.get(s), subjectScores.get(s)));
+            sb.append("%s: %d / 5%n".formatted(s.toString(), subjectScores.get(s)));
         var f = sb.toString();
 
         final var sum = subjectScores.values().stream().mapToLong(n -> n).sum();
@@ -227,9 +229,7 @@ public class Exam {
         return testDate;
     }
 
-    public enum Subject {
-        Math, Science, History, Geography, Arts
-    }
+
 
     public final int has() {
         // Only String.hashCode()...

@@ -2,37 +2,26 @@ public abstract class Question {
 
     // DATA MEMBERS
 
-    private Exam.Subject subject;
+    private Subject subject;
     private String question;
     private boolean correct;
 
     // CONSTRUCTOR
     // Used only to initialize variables for the subclasses
 
-    public Question(Exam.Subject theSubject, String theQuestion) {
+    Question(Subject theSubject, String theQuestion) {
         subject = theSubject;
         question = theQuestion;
     }
 
     // METHODS
 
-    public void printOptions() {
-    }
-
-    public Exam.Subject getSubject() {
+    final Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(Exam.Subject theSubject) {
-        subject = theSubject;
-    }
-
-    public String getQuestion() {
+    String getQuestion() {
         return question;
-    }
-
-    public void setQuestion(String theQuestion) {
-        question = theQuestion;
     }
 
     public abstract void checkAnswer(String userAns);
@@ -51,7 +40,7 @@ public abstract class Question {
     public boolean getCorrect() {
     	return correct;
     }
-
+  
     @Override
     public String toString() {
         return String.join(" ", subject.toString(), question);
