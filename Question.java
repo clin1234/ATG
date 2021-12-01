@@ -2,7 +2,16 @@ public abstract class Question {
 
     // DATA MEMBERS
 
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
     private Subject subject;
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
     private String question;
     private boolean correct;
 

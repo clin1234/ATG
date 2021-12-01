@@ -34,76 +34,6 @@ class ExamTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	void testTakeExam() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testIsValidInputStringMultipleChoice() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testIsValidInputStringTrueOrFalse() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testGradeExam() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testDisplayResult() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testWriteOut() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-	}
-
-	@Test
-	void testPrintExamResult() {
-		fail("Not yet implemented");
-		// Setting up for testing
-		
-		// Call to the method being tested
-
-		// Assertion
-
-	}
 
 	@Test
 	void testGetUserName() {
@@ -124,5 +54,77 @@ class ExamTest {
 		// Assertion
 		assertEquals("2021-11-17", actual);
 	}
+
+	/*
+	@Test
+	void testTakeExam() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testIsValidInputStringMultipleChoice() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testIsValidInputStringTrueOrFalse() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testGradeExam() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testDisplayResult() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testWriteOut() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+	}
+
+	@Test
+	void testPrintExamResult() {
+		fail("Not yet implemented");
+		// Setting up for testing
+
+		// Call to the method being tested
+
+		// Assertion
+
+	}*/
 
 }
