@@ -1,21 +1,27 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
-import javax.swing.*;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
 public class GUI2 {
-    final JTabbedPane tabbedPane = new JTabbedPane();
-    static Exam e;
+    private final JTabbedPane tabbedPane = new JTabbedPane();
+    private static Exam e;
 
-    public final void addComponentToPane(Container pane) {
+    private final void addComponentToPane(Container pane) {
 
         var startCard = new JPanel();
         var instruction = new JLabel("""
@@ -34,9 +40,9 @@ public class GUI2 {
         startCard.add(Box.createVerticalStrut(100));
         startCard.add(instruction);
         startCard.add(Box.createHorizontalStrut(1800));
-        startCard.add(label, BorderLayout.SOUTH);    
-        startCard.add(nameBox, BorderLayout.SOUTH);
-        startCard.add(startButton, BorderLayout.SOUTH);
+        startCard.add(label, BorderLayout.PAGE_END);
+        startCard.add(nameBox, BorderLayout.PAGE_END);
+        startCard.add(startButton, BorderLayout.PAGE_END);
 
         tabbedPane.addTab("Start", startCard);
 
@@ -53,7 +59,7 @@ public class GUI2 {
      * Process answers embedded within the JPanel attached to all tabs except
      * the first and last ones.
      */
-    void processAnswers() {
+    private void processAnswers() {
         // Skip tabs containing instructional and submission messages
         for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
             // Sanity checks
@@ -98,7 +104,7 @@ public class GUI2 {
                     var boxes = panelInTab.getComponents();
                     var delineatedString = Arrays.stream(boxes)
                             .filter(c -> c instanceof JTextField)
-                            .map(c -> ((JTextField) c).getText())
+                            .map(c -> ((JTextComponent) c).getText())
                             .collect(joining(","));
                     //System.out.println(delineatedString);
                     question.checkAnswer(delineatedString);
@@ -110,7 +116,7 @@ public class GUI2 {
         //tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1).setVisible(false);
     }
 
-    void addQs(String name) {
+    private void addQs(String name) {
         e = new Exam(name, LocalDate.now().toString());
         var p = e.getQuestionBank();
         for (int i = 1; i <= p.length; i++) {
@@ -165,7 +171,8 @@ public class GUI2 {
             processAnswers();
             try {
                 e.writeOut();
-                //displayGraph();
+                showForWrongQs();
+                displayGraph();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -191,7 +198,7 @@ public class GUI2 {
         frame.setVisible(true);
     }
 
-    public void showForWrongQs() {
+    private final void showForWrongQs() {
         for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
             // Sanity checks
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
@@ -208,8 +215,8 @@ public class GUI2 {
                 if ((component instanceof JCheckBox c) && !question.isCorrect()) {
                     c.setForeground(Color.RED);
                     //System.out.println("checkbox");
-                } else if ((component instanceof JComboBox cb) && question instanceof MultipleChoice m
-                && !m.isCorrect()) {
+                } else if ((component instanceof JComboBox cb) && (question instanceof MultipleChoice m)
+                        && !m.isCorrect()) {
                     var p = new JLabel(m.getCorrectAnswer() + ", not "
                             + cb.getSelectedItem().toString());
                     panel.add(p);
@@ -217,29 +224,28 @@ public class GUI2 {
                         (question instanceof ShortAnswer sa) &&
                         !sa.isCorrect()) {
                     var missing = sa.getMissingPhrases();
-                    ta.setText("Your response was missing: "+ missing.toString());
+                    ta.setText("Your response was missing: " + missing.toString());
                 }
                 // JPanel containing JTextEntries
-                else if ((question instanceof FillInTheBlank f) && !f.isCorrect()){
+                else if ((question instanceof FillInTheBlank f) && !f.isCorrect()) {
                     // Ugly casts necessary
-                    JPanel panelInTab = (JPanel) component;
+                    if (!(component instanceof JPanel panelInTab)) throw new AssertionError();
                     var boxes = Arrays.stream(panelInTab.getComponents())
-                            .filter(e -> e instanceof JTextField)
+                            .filter(element -> element instanceof JTextField)
                             .toArray(JTextField[]::new);
-                    for (int j = 0; j < boxes.length; j++) {
-                        if (!boxes[j].getText().equals(f.getCorrectAnswers()[i])) {
-                            var entry = (JTextField) panelInTab.getComponent(i);
+                    for (int j = 0; j < boxes.length; j++)
+                        if (!boxes[j].getText().equals(f.getCorrectAnswers()[j])) {
+                            var entry = (JTextField) panelInTab.getComponent(j);
                             entry.setForeground(Color.RED);
-                            entry.setText(f.getCorrectAnswers()[i]);
+                            entry.setText(f.getCorrectAnswers()[j]);
                         }
-                    }
                     //System.out.println("panel with text entries");
                 }
             }
         }
     }
 
-    public static void displayGraph() throws IOException {
+    private static void displayGraph() throws IOException {
         var db = Files.readAllLines(Path.of("db.csv"));
         if (db.isEmpty())
             System.err.println("Try taking the test, buddy. Nothing to pry open with your wily eyes, eh?");
@@ -265,9 +271,18 @@ public class GUI2 {
             var ds = new DefaultCategoryDataset();
             for (var kv : e.getSubjectScores().entrySet())
                 ds.addValue(kv.getValue(), kv.getKey(), e.getUserName());
+            ds.addValue(e.getSubjectScores().values().stream().mapToInt(e -> e).sum(),
+                    "uniq",
+                    "Total score of " + e.getUserName());
             for (var kv : avrgScorPerSubj.entrySet())
                 ds.addValue(kv.getValue(), kv.getKey(), "Averages of all test takers");
-            var c = ChartFactory.createBarChart("Stats", "Score", "", ds);
+            ds.addValue(avrgScorPerSubj.values().stream().mapToDouble(e -> e).sum(),
+                    "uniq",
+                    "Average score of this test");
+
+            var c = ChartFactory.createStackedBarChart("Stats", "Score", "", ds);
+            c.getCategoryPlot().getRangeAxis().setRange(0, 25);
+            c.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
             var frame = new ChartFrame("Past Test Statistics", c);
             frame.setSize(500, 400);
             frame.setVisible(true);
