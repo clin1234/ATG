@@ -1,12 +1,14 @@
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
     private final HashSet<String> expectedKeywords;
 
-    public final HashSet<String> getMissingPhrases() {
-        return missingPhrases;
+    public final Set<String> getMissingPhrases() {
+        return Collections.unmodifiableSet(missingPhrases);
     }
 
     private HashSet<String> missingPhrases;
@@ -23,22 +25,16 @@ public class ShortAnswer extends Question {
     }
 
     @Override
-    public void checkAnswer(String input) {
+    public final void checkAnswer(String userAns) {
         missingPhrases = new HashSet<>(expectedKeywords.size());
-        Stream<String> stringStream = expectedKeywords.parallelStream().filter(p -> !input.contains(p));
+        Stream<String> stringStream = expectedKeywords.parallelStream().filter(p -> !userAns.contains(p));
         stringStream.forEach(missingPhrases::add);
 
         setCorrect(missingPhrases.isEmpty());
     }
 
     @Override
-    public String showForWrongQ() {
+    public final String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
-    }
-
-    @Override
-    public String toString() {
-        return String.join(" ",
-                expectedKeywords.toString(), super.toString());
     }
 }

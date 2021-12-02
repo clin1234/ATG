@@ -2,10 +2,6 @@ public class TrueOrFalse extends Question {
 
     // Data Members
 
-    public boolean isTrueRight() {
-        return trueRight;
-    }
-
     private boolean trueRight;
 
     /**
@@ -15,23 +11,17 @@ public class TrueOrFalse extends Question {
      * @param trueIsCorrect Whether the true option is the correct answer
      */
     public TrueOrFalse(Subject theSubject, String theQuestion, boolean trueIsCorrect) {
-
         super(theSubject, theQuestion);
         trueRight = trueIsCorrect;
     }
 
     @Override
-    public void checkAnswer(String userAns) {
+    public final void checkAnswer(String userAns) {
         setCorrect(Boolean.parseBoolean(userAns) == trueRight);
     }
 
     @Override
-    public String showForWrongQ() {
+    public final String showForWrongQ() {
         return "Your answer should be "+ trueRight;
-    }
-
-    @Override
-    public String toString() {
-        return String.join(" ", trueRight + super.toString());
     }
 }

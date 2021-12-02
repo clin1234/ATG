@@ -6,7 +6,7 @@ public class MultipleChoice extends Question {
 
     private String[] responseOptions;
 
-    public String getCorrectAnswer() {
+    public final String getCorrectAnswer() {
         return correctAnswer;
     }
 
@@ -33,10 +33,10 @@ public class MultipleChoice extends Question {
     // Methods
 
     // Printing all response options
-    public void printOptions() {
+    public final void printOptions() {
         // For example purposes I'll be using System.out.println()
         for (int i = 0; i < responseOptions.length; i++)
-            System.out.printf("   %d. %s%n", i + 1, responseOptions[i]);
+            System.out.printf("%d. %s%n", i + 1, responseOptions[i]);
     }
 
     public String[] getResponseOptions() {
@@ -56,7 +56,7 @@ public class MultipleChoice extends Question {
     public String showForWrongQ() {
         var sb = new StringBuilder(20);
         for (int i = 0; i < responseOptions.length; i++) {
-            String tmp = "   %d. %s".formatted(i + 1, responseOptions[i]);
+            String tmp = "%d. %s".formatted(i + 1, responseOptions[i]);
             if (correctAnswer.equals(responseOptions[i])) tmp += " <-- Correct answer";
             sb.append(tmp + System.lineSeparator());
         }

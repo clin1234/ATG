@@ -1,28 +1,50 @@
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
 public class GUI2 {
-    private final JTabbedPane tabbedPane = new JTabbedPane();
     private static Exam e;
+    private final JTabbedPane tabbedPane = new JTabbedPane();
+
+    private static void createAndShowGUI() {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Automated Exam Generator");
+        frame.setMinimumSize(new Dimension(700, 400));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Create and set up the content pane.
+        var demo = new GUI2();
+        demo.addComponentToPane(frame.getContentPane());
+
+        UIManager.put("swing.boldMetal", Boolean.FALSE);
+        try {
+            UIManager.setLookAndFeel(new MetalLookAndFeel());
+        }
+        catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+        SwingUtilities.updateComponentTreeUI(frame);
+
+        //Display the window.
+        frame.pack();
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) throws IOException {
+        SwingUtilities.invokeLater(GUI2::createAndShowGUI);
+        Reporter.displayGraph(e);
+    }
 
     private final void addComponentToPane(Container pane) {
-
         var startCard = new JPanel();
         var instruction = new JLabel("""
                 <html>
@@ -39,7 +61,7 @@ public class GUI2 {
 
         startCard.add(Box.createVerticalStrut(100));
         startCard.add(instruction);
-        startCard.add(Box.createHorizontalStrut(1800));
+        startCard.add(Box.createHorizontalStrut(1_800));
         startCard.add(label, BorderLayout.PAGE_END);
         startCard.add(nameBox, BorderLayout.PAGE_END);
         startCard.add(startButton, BorderLayout.PAGE_END);
@@ -65,20 +87,16 @@ public class GUI2 {
             // Sanity checks
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
 
-            Question question = e.getQuestionBank()[i - 1];
-            //System.out.println(i + " " + question.getQuestion());
+            var question = e.getQuestionBank()[i - 1];
 
             // Hope assumption is true...
             var panel = (JPanel) tabbedPane.getComponentAt(i);
-            //System.out.print("Answer: ");
             for (var component : panel.getComponents()) {
                 // Skip question text and next and previous buttons
-                if ((component instanceof JLabel) || (component instanceof JButton)) continue;
+                if (component instanceof JLabel || component instanceof JButton) continue;
                 if (component instanceof JCheckBox c) {
                     var isTrue = c.isSelected();
-                    //System.out.println(isTrue);
                     question.checkAnswer(String.valueOf(isTrue));
-                    //System.out.println("checkbox");
                 } else if (component instanceof JComboBox cb) {
                     /* All because a stupid decision for MultipleChoice's checkAnswer's parameter
                      * to be a string of the index of the choice + 1.
@@ -88,14 +106,10 @@ public class GUI2 {
                             Arrays.asList(((MultipleChoice) question)
                                             .getResponseOptions())
                                     .indexOf(Objects.requireNonNull(cb.getSelectedItem()).toString()) + 1);
-                    //System.out.println(entryIdx);
                     question.checkAnswer(entryIdx);
-                    //System.out.println("combobox");
                 } else if (component instanceof JTextArea ta) {
                     var entry = ta.getText();
-                    //System.out.println(entry);
                     question.checkAnswer(entry);
-                    //System.out.println("textarea");
                 }
                 // JPanel containing JTextEntries
                 else {
@@ -106,14 +120,11 @@ public class GUI2 {
                             .filter(c -> c instanceof JTextField)
                             .map(c -> ((JTextComponent) c).getText())
                             .collect(joining(","));
-                    //System.out.println(delineatedString);
                     question.checkAnswer(delineatedString);
-                    //System.out.println("panel with text entries");
                 }
             }
         }
         e.gradeExam();
-        //tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1).setVisible(false);
     }
 
     private void addQs(String name) {
@@ -157,9 +168,9 @@ public class GUI2 {
                     tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
             });
 
-            nextQuestion.addActionListener(event -> {
-                tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
-            });
+            nextQuestion.addActionListener(event ->
+                    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1)
+            );
 
             //tmpPanel.add(Box.createHorizontalStrut(800));
             tmpPanel.add(previousQuestion);
@@ -175,30 +186,13 @@ public class GUI2 {
             try {
                 e.writeOut();
                 showForWrongQs();
-                displayGraph();
+                Reporter.displayGraph(e);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
         submissionCard.add(submit);
         tabbedPane.addTab("Submission", submissionCard);
-    }
-
-    private static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame frame = new JFrame("Automated Exam Generator");
-        frame.setMinimumSize(new Dimension(700, 400));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Create and set up the content pane.
-        var demo = new GUI2();
-        demo.addComponentToPane(frame.getContentPane());
-
-        //Display the window.
-        frame.pack();
-        frame.setSize(600, 400);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 
     private final void showForWrongQs() {
@@ -219,7 +213,7 @@ public class GUI2 {
                 if ((component instanceof JCheckBox c) && (question instanceof TrueOrFalse t) && !t.isCorrect()) {
                     c.setForeground(Color.RED);
                     //System.out.println("checkbox");
-                } else if ((component instanceof JComboBox cb) && (question instanceof MultipleChoice m)
+                } else if ((component instanceof JComboBox<?> cb) && (question instanceof MultipleChoice m)
                         && !m.isCorrect()) {
                     var p = new JLabel(m.getCorrectAnswer() + ", not "
                             + cb.getSelectedItem().toString());
@@ -231,7 +225,7 @@ public class GUI2 {
                     ta.setText("Your response was missing: " + missing.toString());
                 }
                 // JPanel containing JTextEntries
-                else if ((question instanceof FillInTheBlank f) && !f.isCorrect()) {
+                else if (question instanceof FillInTheBlank f && !f.isCorrect()) {
                     // Ugly casts necessary
                     if (component instanceof JPanel panelInTab) {
                         var boxes = Arrays.stream(panelInTab.getComponents())
@@ -248,54 +242,5 @@ public class GUI2 {
                 }
             }
         }
-    }
-
-    private static void displayGraph() throws IOException {
-        var db = Files.readAllLines(Path.of("db.csv"));
-        if (db.isEmpty())
-            System.err.println("Try taking the test, buddy. Nothing to pry open with your wily eyes, eh?");
-        else {
-            final var avrgScorPerSubj = new EnumMap<>(Map.of(Subject.Math, 0.0, Subject.Arts, 0.0,
-                    Subject.Geography, 0.0, Subject.History, 0.0, Subject.Science, 0.0));
-            for (var line : db) {
-                // Scores in order: Math, Science, History, Geography, Arts (each out of 5)
-                var tmpStream = Arrays.stream(line.split(",", 3)[2].split(","));
-                var doubleStream = tmpStream.mapToDouble(Double::parseDouble);
-                final var userScores = doubleStream.toArray();
-                avrgScorPerSubj.put(Subject.Math, avrgScorPerSubj.get(Subject.Math) + userScores[0]);
-                avrgScorPerSubj.put(Subject.Arts, avrgScorPerSubj.get(Subject.Arts) + userScores[4]);
-                avrgScorPerSubj.put(Subject.Geography, avrgScorPerSubj.get(Subject.Geography) + userScores[3]);
-                avrgScorPerSubj.put(Subject.History, avrgScorPerSubj.get(Subject.History) + userScores[2]);
-                avrgScorPerSubj.put(Subject.Science, avrgScorPerSubj.get(Subject.Science) + userScores[1]);
-            }
-            for (final var entry : avrgScorPerSubj.entrySet()) {
-                double avg = entry.getValue() / db.size();
-                avrgScorPerSubj.put(entry.getKey(), avg);
-            }
-
-            var ds = new DefaultCategoryDataset();
-            for (var kv : e.getSubjectScores().entrySet())
-                ds.addValue(kv.getValue(), kv.getKey(), e.getUserName());
-            ds.addValue(e.getSubjectScores().values().stream().mapToInt(e -> e).sum(),
-                    "Total",
-                    "Total score of " + e.getUserName());
-            for (var kv : avrgScorPerSubj.entrySet())
-                ds.addValue(kv.getValue(), kv.getKey(), "Averages of all test takers");
-            ds.addValue(avrgScorPerSubj.values().stream().mapToDouble(e -> e).sum(),
-                    "Total",
-                    "Average score of this test");
-
-            var c = ChartFactory.createStackedBarChart("Stats", "Score", "", ds);
-            c.getCategoryPlot().getRangeAxis().setRange(0, 25);
-            c.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-            var frame = new ChartFrame("Past Test Statistics", c);
-            frame.setSize(500, 400);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(GUI2::createAndShowGUI);
     }
 }

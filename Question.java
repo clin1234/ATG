@@ -2,8 +2,8 @@ public abstract class Question {
 
     // DATA MEMBERS
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setSubject(Subject sub) {
+        subject = sub;
     }
 
     private Subject subject;
@@ -29,7 +29,7 @@ public abstract class Question {
         return subject;
     }
 
-    String getQuestion() {
+    final String getQuestion() {
         return question;
     }
 
@@ -37,21 +37,16 @@ public abstract class Question {
 
     public abstract String showForWrongQ();
 
-    public boolean isCorrect() {
+    public final boolean isCorrect() {
         return correct;
     }
 
-    public void setCorrect(boolean b) {
-        correct = b;
+    public final void setCorrect(boolean cor) {
+        correct = cor;
     }
 
     // Used for unit tests
-    public boolean getCorrect() {
+    public final boolean getCorrect() {
     	return correct;
-    }
-  
-    @Override
-    public String toString() {
-        return String.join(" ", subject.toString(), question);
     }
 }

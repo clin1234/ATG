@@ -29,8 +29,6 @@ public class Exam {
     }
 
     private final Question[] questionBank = new Question[25];
-    // Temporary to hold user's answer
-    String userAnswer;
 
     public EnumMap<Subject, Integer> getSubjectScores() {
         return subjectScores;
@@ -149,21 +147,6 @@ public class Exam {
         for (int i = 0; i < questionBank.length; i++) questionBank[i].checkAnswer(ans[i]);
     }
 
-    public boolean isValidInput(String s, MultipleChoice m) {
-        try {
-            int choice = Integer.parseInt(s);
-            return List.of(1, 2, 3, 4).contains(choice);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public boolean isValidInput(String s, TrueOrFalse q) {
-        if (s == null)
-            return false;
-        return List.of("false", "true").contains(s.toLowerCase());
-    }
-
     // Function to grade the exam
     public final void gradeExam() {
         /*
@@ -179,11 +162,10 @@ public class Exam {
                         Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
     }
 
-    // Print user's score on the test
-    public void displayResult(String... ans) {
+    public void showForIncorrectAns(String... ans) {
         if (List.of(questionBank).parallelStream().anyMatch(q -> !q.isCorrect())) {
             System.out.println("Questions you answered incorrectly.");
-            for (short i = 0; i < questionBank.length; i++) {
+            for (int i = 0; i < questionBank.length; i++) {
                 var q = questionBank[i];
                 if (!q.isCorrect()) {
                     System.out.println((i + 1) + ") " + q.getQuestion());
@@ -193,8 +175,6 @@ public class Exam {
                 }
             }
         }
-        //System.out.println();
-        System.out.println(printExamResult());
     }
 
     public void writeOut() throws IOException {
@@ -206,37 +186,11 @@ public class Exam {
         }
     }
 
-    public String printExamResult() {
-        var sb = new StringBuilder(30);
-        for (var s : Subject.values())
-            sb.append("%s: %d / 5%n".formatted(s.toString(), subjectScores.get(s)));
-        var f = sb.toString();
-
-        final var sum = subjectScores.values().stream().mapToLong(n -> n).sum();
-        return """
-                Name of test taker: %s
-                Date: %s
-                """.formatted(userName, testDate) + f + """
-                Total: %d / %d
-                """.formatted(sum, MAX_SCORE);
-    }
-
     public String getUserName() {
         return userName;
     }
 
     public String getTestDate() {
         return testDate;
-    }
-
-
-
-    public final int has() {
-        // Only String.hashCode()...
-        var stream = Arrays.stream(questionBank).map(Question::toString);
-        /* and List.hashCode() have guaranteed hashing methods specified in the spec,
-        so this should return the same hashcode across Java versions */
-        var p = stream.toArray(String[]::new);
-        return Arrays.hashCode(p);
     }
 }
