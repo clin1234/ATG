@@ -5,9 +5,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 
+/**
+ * Only contains {@link #displayGraph(Exam) displayGraph}, a static method
+ * used to display statistics about the user and the exam as a whole.
+ */
 public class Reporter {
     public static void displayGraph(Exam exam) throws IOException {
         var db = Files.readAllLines(Path.of("db.csv"));
@@ -35,21 +42,27 @@ public class Reporter {
             }
 
             var dataset = new DefaultCategoryDataset();
+            // Add test taker's per subject score to dataset
             for (var kv : exam.getSubjectScores().entrySet())
                 dataset.addValue(kv.getValue(), kv.getKey(), exam.getUserName());
-            dataset.addValue(exam.getSubjectScores().values().stream().mapToInt(e -> e).sum(),
+            // Add test taker's total score to dataset
+            dataset.addValue(Integer.valueOf(exam.getSubjectScores()
+                            .values().stream().mapToInt(e -> e).sum()),
                     "Total",
                     "Total score of " + exam.getUserName());
+            // Add average per subject score from all takers to dataset
             for (var kv : avrScorePerSubj.entrySet())
                 dataset.addValue(kv.getValue(), kv.getKey(), "Averages of all test takers");
+            // Add average total exam score to dataset
             dataset.addValue(avrScorePerSubj.values().stream().mapToDouble(e -> e).sum(),
                     "Total",
                     "Average score of this test");
 
-            var c = ChartFactory.createStackedBarChart("Stats", "Score", "", dataset);
-            c.getCategoryPlot().getRangeAxis().setRange(0.0, 25.0);
-            c.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-            var frame = new ChartFrame("Past Test Statistics", c);
+            var chart = ChartFactory.createStackedBarChart(
+                    "Stats", "Score", "", dataset);
+            chart.getCategoryPlot().getRangeAxis().setRange(0.0, 25.0);
+            chart.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            var frame = new ChartFrame("Past Test Statistics", chart);
             frame.setSize(500, 400);
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

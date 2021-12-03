@@ -5,12 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ShortAnswer extends Question {
-    private final HashSet<String> expectedKeywords;
-
-    public final Set<String> getMissingPhrases() {
-        return Collections.unmodifiableSet(missingPhrases);
-    }
-
+    private final Set<String> expectedKeywords;
     private HashSet<String> missingPhrases;
 
     /**
@@ -36,5 +31,9 @@ public class ShortAnswer extends Question {
     @Override
     public final String showForWrongQ() {
         return "Your answer needs the following phrases: " + String.join(", ", missingPhrases);
+    }
+
+    public final Set<String> getMissingPhrases() {
+        return Collections.unmodifiableSet(missingPhrases);
     }
 }

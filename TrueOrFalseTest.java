@@ -34,7 +34,4 @@ class TrueOrFalseTest {
 		TrueOrFalse a = new TrueOrFalse(Subject.Math, "Does 2 + 2 = 4", true);
 		assertNotNull(a);
 	}
-	
-	
-
 }

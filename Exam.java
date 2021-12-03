@@ -18,22 +18,11 @@ import java.util.stream.Stream;
 public class Exam {
 
     // Data Members
-    // private int userScore = 0;
     private static final int MAX_SCORE = 25;
     private static final int QUESTION_WEIGHT = 1;
     private final String userName;
     private final String testDate;
-
-    public Question[] getQuestionBank() {
-        return questionBank;
-    }
-
     private final Question[] questionBank = new Question[25];
-
-    public EnumMap<Subject, Integer> getSubjectScores() {
-        return subjectScores;
-    }
-
     private EnumMap<Subject, Integer> subjectScores;
 
     // CONSTRUCTOR
@@ -43,6 +32,13 @@ public class Exam {
         // Setting exam taker's name and date test was taken
         userName = theUser;
         testDate = theTestDate;
+        subjectScores = new EnumMap<>(Map.of(
+                Subject.Arts, 0,
+                Subject.Geography, 0,
+                Subject.Science, 0,
+                Subject.Math, 0,
+                Subject.History, 0
+        ));
         // TODO: maybe in the future, store Qs in a file, then randomly choose 25?
 
         // Creating Math Subject Question Objects
@@ -133,33 +129,19 @@ public class Exam {
         questionBank[24] = Geography_SA;
     }
 
-    public static int getMAX_SCORE() {
-        return MAX_SCORE;
-    }
-
-    public static int getQUESTION_WEIGHT() {
-        return QUESTION_WEIGHT;
-    }
-
     // Function to print questions and read user's input
     public void takeExam(String... ans) {
-        assert ans.length == questionBank.length;
         for (int i = 0; i < questionBank.length; i++) questionBank[i].checkAnswer(ans[i]);
     }
 
     // Function to grade the exam
     public final void gradeExam() {
-        /*
-         * Keep only correctly-answered questions, count number of questions answered
-         * correctly per subject, and store in EnumMap, with keys being the subjects and
-         * values being their per subject score
-         */
-        Stream<Question> stream = Arrays.stream(questionBank);
-        Stream<Question> questionStream = stream.filter(Question::isCorrect);
-        subjectScores = questionStream
-                .collect(Collectors.groupingBy(Question::getSubject,
-                        () -> new EnumMap<>(Subject.class),
-                        Collectors.summingInt(q -> QUESTION_WEIGHT * 1)));
+        for (var q : questionBank) {
+            if (q.isCorrect()) {
+                int oldScore = subjectScores.get(q.getSubject());
+                subjectScores.put(q.getSubject(), oldScore + 1 * QUESTION_WEIGHT);
+            }
+        }
     }
 
     public void showForIncorrectAns(String... ans) {
@@ -192,5 +174,21 @@ public class Exam {
 
     public String getTestDate() {
         return testDate;
+    }
+
+    public EnumMap<Subject, Integer> getSubjectScores() {
+        return subjectScores;
+    }
+
+    public Question[] getQuestionBank() {
+        return questionBank;
+    }
+
+    public static int getMAX_SCORE() {
+        return MAX_SCORE;
+    }
+
+    public static int getQUESTION_WEIGHT() {
+        return QUESTION_WEIGHT;
     }
 }

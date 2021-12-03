@@ -11,15 +11,15 @@ class FillInTheBlankTest {
 				"3", "2", "1", "5");
 						
 		// Check that the call worked as it should
-		assertTrue(fib instanceof FillInTheBlank);
+		assertNotNull(fib);
 	}
 	
 	@Test
 	void testCheckAnswerIsEmpty() {
 		// Setting up for testing
-		FillInTheBlank fib = new FillInTheBlank(Subject.History, "_________ once"
-				+ " said \"I have a dream.\"?", "Martin Luther King", "Nelson Mandela", "Ghandi",
-				"Martin Luther King", "Barack Obama");
+		FillInTheBlank fib = new FillInTheBlank(Subject.History,
+				"_________ once said \"I have a dream.\"?",
+				"Martin Luther King", "Nelson Mandela", "Gandhi", "Martin Luther King", "Barack Obama");
 		
 		// Call to the method being tested
 		fib.checkAnswer("");
@@ -44,8 +44,8 @@ class FillInTheBlankTest {
 	@Test
 	void testCheckAnswerIsRight() {
 		// Setting up for testing
-		FillInTheBlank fib = new FillInTheBlank(Subject.History, "California and Texas were"
-				+ " once part of _____.",
+		FillInTheBlank fib = new FillInTheBlank(Subject.History,
+				"California and Texas were once part of _____.",
 				"Mexico");
 		
 		// Call to the method being tested

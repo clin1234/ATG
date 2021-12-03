@@ -39,9 +39,9 @@ public class GUI2 {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        //createAndShowGUI();
         SwingUtilities.invokeLater(GUI2::createAndShowGUI);
-        Reporter.displayGraph(e);
     }
 
     private final void addComponentToPane(Container pane) {
@@ -82,35 +82,34 @@ public class GUI2 {
      * the first and last ones.
      */
     private void processAnswers() {
+        String[] tmpArray = new String[25];
+        Arrays.fill(tmpArray, "");
         // Skip tabs containing instructional and submission messages
         for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
             // Sanity checks
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
 
-            var question = e.getQuestionBank()[i - 1];
+            //var question = e.getQuestionBank()[i - 1];
 
             // Hope assumption is true...
             var panel = (JPanel) tabbedPane.getComponentAt(i);
             for (var component : panel.getComponents()) {
                 // Skip question text and next and previous buttons
                 if (component instanceof JLabel || component instanceof JButton) continue;
-                if (component instanceof JCheckBox c) {
-                    var isTrue = c.isSelected();
-                    question.checkAnswer(String.valueOf(isTrue));
-                } else if (component instanceof JComboBox cb) {
+                if (component instanceof JCheckBox checkBox)
+                    tmpArray[i-1] = Boolean.toString(checkBox.isSelected());
+                else if (component instanceof JComboBox cb) {
                     /* All because a stupid decision for MultipleChoice's checkAnswer's parameter
                      * to be a string of the index of the choice + 1.
                      * If anyone happens to find this codebase in the future...
                      * well get ready to feel metaphorical rectal discomfort.*/
                     var entryIdx = Integer.toString(
-                            Arrays.asList(((MultipleChoice) question)
+                            Arrays.asList(((MultipleChoice) e.getQuestionBank()[i - 1])
                                             .getResponseOptions())
                                     .indexOf(Objects.requireNonNull(cb.getSelectedItem()).toString()) + 1);
-                    question.checkAnswer(entryIdx);
-                } else if (component instanceof JTextArea ta) {
-                    var entry = ta.getText();
-                    question.checkAnswer(entry);
-                }
+                    tmpArray[i-1] = entryIdx;
+                } else if (component instanceof JTextArea textEntry)
+                    tmpArray[i-1] = textEntry.getText();
                 // JPanel containing JTextEntries
                 else {
                     // Ugly casts necessary
@@ -120,10 +119,11 @@ public class GUI2 {
                             .filter(c -> c instanceof JTextField)
                             .map(c -> ((JTextComponent) c).getText())
                             .collect(joining(","));
-                    question.checkAnswer(delineatedString);
+                    tmpArray[i-1] = delineatedString;
                 }
             }
         }
+        e.takeExam(tmpArray);
         e.gradeExam();
     }
 
@@ -153,21 +153,24 @@ public class GUI2 {
                 */
             } else if (question instanceof FillInTheBlank q) {
                 var groupOfEntries = new JPanel(new GridBagLayout());
-                var size = q.numberOfEntries;
+                int size = q.getCorrectAnswers().length;
                 for (int j = 0; j < size; j++)
                     groupOfEntries.add(new JTextField(10));
                 tmpPanel.add(groupOfEntries, new GridBagConstraints());
             } else if (question instanceof ShortAnswer) tmpPanel.add(new JTextArea(2, 10));
 
+            // Set up tab containing instructions
             tabbedPane.addTab(Integer.toString(i), tmpPanel);
             tabbedPane.setSelectedIndex(1);
             tabbedPane.setEnabledAt(0, false);
 
+            // Make this button go to previous question
             previousQuestion.addActionListener(event -> {
                 if (tabbedPane.getSelectedIndex() > 1)
                     tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
             });
 
+            // Make this button go to next question
             nextQuestion.addActionListener(event ->
                     tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1)
             );
@@ -195,25 +198,21 @@ public class GUI2 {
         tabbedPane.addTab("Submission", submissionCard);
     }
 
-    private final void showForWrongQs() {
+    private final void showForWrongQs() throws IOException {
         for (int i = 1; i < (tabbedPane.getTabCount() - 1); i++) {
-            // Sanity checks
+            // Sanity check
             if (!Objects.equals(tabbedPane.getTitleAt(i), Integer.toString(i))) throw new AssertionError();
 
             Question question = e.getQuestionBank()[i - 1];
-            //System.out.println(i + " " + question.getQuestion());
 
             // Hope assumption is true...
             var panel = (JPanel) tabbedPane.getComponentAt(i);
-            //System.out.print("Answer: ");
             for (var component : panel.getComponents()) {
                 // Skip question text
                 if (component instanceof JLabel) continue;
-                boolean isSet = false;
-                if ((component instanceof JCheckBox c) && (question instanceof TrueOrFalse t) && !t.isCorrect()) {
+                if ((component instanceof JCheckBox c) && (question instanceof TrueOrFalse t) && !t.isCorrect())
                     c.setForeground(Color.RED);
-                    //System.out.println("checkbox");
-                } else if ((component instanceof JComboBox<?> cb) && (question instanceof MultipleChoice m)
+                else if ((component instanceof JComboBox<?> cb) && (question instanceof MultipleChoice m)
                         && !m.isCorrect()) {
                     var p = new JLabel(m.getCorrectAnswer() + ", not "
                             + cb.getSelectedItem().toString());
@@ -222,7 +221,7 @@ public class GUI2 {
                         (question instanceof ShortAnswer sa) &&
                         !sa.isCorrect()) {
                     var missing = sa.getMissingPhrases();
-                    ta.setText("Your response was missing: " + missing.toString());
+                    ta.setText("Your response was missing: " + missing);
                 }
                 // JPanel containing JTextEntries
                 else if (question instanceof FillInTheBlank f && !f.isCorrect()) {
@@ -237,10 +236,10 @@ public class GUI2 {
                                 entry.setForeground(Color.RED);
                                 entry.setText(f.getCorrectAnswers()[j]);
                             }
-                        //System.out.println("panel with text entries");
                     }
                 }
             }
+            Reporter.displayGraph(e);
         }
     }
 }

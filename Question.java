@@ -2,15 +2,7 @@ public abstract class Question {
 
     // DATA MEMBERS
 
-    public void setSubject(Subject sub) {
-        subject = sub;
-    }
-
     private Subject subject;
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
 
     private String question;
     private boolean correct;
@@ -25,14 +17,6 @@ public abstract class Question {
 
     // METHODS
 
-    final Subject getSubject() {
-        return subject;
-    }
-
-    final String getQuestion() {
-        return question;
-    }
-
     public abstract void checkAnswer(String userAns);
 
     public abstract String showForWrongQ();
@@ -43,6 +27,22 @@ public abstract class Question {
 
     public final void setCorrect(boolean cor) {
         correct = cor;
+    }
+
+    public final void setSubject(Subject sub) {
+        subject = sub;
+    }
+
+    public final void setQuestion(String q) {
+        question = q;
+    }
+
+    final Subject getSubject() {
+        return subject;
+    }
+
+    final String getQuestion() {
+        return question;
     }
 
     // Used for unit tests

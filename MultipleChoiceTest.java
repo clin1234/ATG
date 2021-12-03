@@ -9,13 +9,7 @@ class MultipleChoiceTest {
 		MultipleChoice a = new MultipleChoice(Subject.Math, "What is 1 + 1?","2", "1", "2", "3", "4");
 		assertNotNull(a);
 	}
-	
-	@Test
-	public void testMCA() {
-		MultipleChoice a = new MultipleChoice(Subject.History, "Which President was Washington?", "1", "1", "2", "3", "4");
-		assertTrue(a instanceof MultipleChoice);
-	}
-	
+
 	@Test
 	public void testGetResponseOptions() {
 		MultipleChoice a = new MultipleChoice(Subject.Arts, "How old was Van Gogh", "50", "10", "20", "50", "40");
@@ -31,11 +25,15 @@ class MultipleChoiceTest {
 		assertArrayEquals(expected, a.getResponseOptions());
 	}
 	
-	/*
+
 	@Test
 	public void testShowForWrongQ() {
-		MultipleChoice a = new MultipleChoice(Subject.Geography, "How many States are in the USA", "50", "53", "50", "51", "52");
-		String expected = "1. 53\n2. 50 <-- Correct answer\n3. 51\n4. 52\n";
+		MultipleChoice a = new MultipleChoice(Subject.Geography, "How many States are in the USA",
+				"50", "53", "50", "51", "52");
+		// Needed, because the string returned by showForWrongQ contains system-specific line separators
+		final String lineSep = System.lineSeparator();
+		String expected = "1. 53%s2. 50 <-- Correct answer%s3. 51%s4. 52%s"
+				.formatted(lineSep, lineSep, lineSep, lineSep);
 		assertEquals(expected, a.showForWrongQ());
-	}*/
+	}
 }

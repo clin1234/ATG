@@ -5,14 +5,7 @@ public class MultipleChoice extends Question {
     // Data Members
 
     private String[] responseOptions;
-
-    public final String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
     private String correctAnswer;
-
-    // Constructor
 
     /**
      * @param theSubject       Subject
@@ -20,6 +13,8 @@ public class MultipleChoice extends Question {
      * @param theCorrectAnswer Correct choice
      * @param choices          Response options
      */
+
+    // Constructor
     public MultipleChoice(Subject theSubject, String theQuestion, String theCorrectAnswer, String... choices) {
 
         // Calling super-class' constructor
@@ -30,6 +25,7 @@ public class MultipleChoice extends Question {
         responseOptions = Arrays.stream(choices).map(String::toLowerCase).toArray(String[]::new);
     }
 
+
     // Methods
 
     // Printing all response options
@@ -39,32 +35,32 @@ public class MultipleChoice extends Question {
             System.out.printf("%d. %s%n", i + 1, responseOptions[i]);
     }
 
-    public String[] getResponseOptions() {
-        return responseOptions;
-    }
-
-    public void setResponseOptions(String... choices) {
-        responseOptions = choices;
+    @Override
+    public final void checkAnswer(String s) {
+        if (s.isEmpty()) setCorrect(false);
+        else setCorrect(correctAnswer.equals(responseOptions[Integer.parseInt(s) - 1]));
     }
 
     @Override
-    public void checkAnswer(String s) {
-        setCorrect(correctAnswer.equals(responseOptions[Short.parseShort(s) - 1]));
-    }
-
-    @Override
-    public String showForWrongQ() {
+    public final String showForWrongQ() {
         var sb = new StringBuilder(20);
         for (int i = 0; i < responseOptions.length; i++) {
-            String tmp = "%d. %s".formatted(i + 1, responseOptions[i]);
-            if (correctAnswer.equals(responseOptions[i])) tmp += " <-- Correct answer";
-            sb.append(tmp + System.lineSeparator());
+            sb.append("%d. %s".formatted(i + 1, responseOptions[i]));
+            if (correctAnswer.equals(responseOptions[i])) sb.append(" <-- Correct answer");
+            sb.append(System.lineSeparator());
         }
         return sb.toString();
     }
 
-    @Override
-    public String toString() {
-        return String.join(" ",  Arrays.toString(responseOptions), correctAnswer, super.toString());
+    public final String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public final String[] getResponseOptions() {
+        return responseOptions;
+    }
+
+    public final void setResponseOptions(String... choices) {
+        responseOptions = choices;
     }
 }
