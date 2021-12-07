@@ -10,3 +10,6 @@ a graph showing the user's per subject score and past attempts, courtesy of JFre
 
 The second one, GUI2, starts a Swing application that presents the test-taker a user-friendly interface
 to answer questions. The end result is the same compared to the command-line driver.
+
+## Unit tests
+Each ancilliary class has unit tests. Refer to [this](https://junit.org/junit5/docs/current/user-guide/#running-tests-console-launcher) to run them on the command line, or use your favorite IDE.
